@@ -1,18 +1,21 @@
 "use client";
 
-import Loader from "@/components/common/Loader";
 import { AppSidebar } from "@/components/dashboard/app-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { useGetRestaurantQuery } from "@/hooks/use-restaurant";
-import { getRestaurant } from "@/services/restaurant";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Layout({ children }) {
+  const router = useRouter();
+
   const { data: restaurant } = useGetRestaurantQuery();
 
-  if (!restaurant) {
-    redirect("/onboarding");
-  }
+  useEffect(() => {
+    if (!restaurant) {
+      router.push("/onboarding");
+    }
+  }, [restaurant]);
 
   return (
     <SidebarProvider>
