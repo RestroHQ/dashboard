@@ -58,7 +58,7 @@ const Page = () => {
     if (restaurant) {
       router.push("/dashboard");
     }
-  }, [restaurant]);
+  }, []);
 
   const onSubmit = async (values) => {
     localStorage.setItem("restaurant", JSON.stringify(values));
