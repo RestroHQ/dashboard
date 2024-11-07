@@ -21,11 +21,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Logo from "@/components/common/Logo";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
-import LogoWithText from "@/components/common/LogoWithText";
-import { setCookie } from "cookies-next";
+import LogoWithText from "@/components/common/logo-with-text";
 import { useRouter } from "next/navigation";
 import { useGetRestaurantQuery } from "@/hooks/use-restaurant";
 import { useAuth } from "@/hooks/use-auth";
