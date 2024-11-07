@@ -17,26 +17,50 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Fragment, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const restaurants = [
   {
-    value: "mcdonalds",
-    label: "McDonald's",
+    value: "the-continental",
+    label: "The Continental",
   },
   {
-    value: "kfc",
-    label: "KFC",
+    value: "pops-diner",
+    label: "Pop's Diner",
   },
   {
-    value: "burger-king",
-    label: "Burger King",
+    value: "the-krusty-krab",
+    label: "The Krusty Krab",
+  },
+  {
+    value: "vitos-pizza",
+    label: "Vito's Pizza",
   },
 ];
 
-const RestaurantsSwitcher = () => {
+export function RestaurantSwitcher() {
+  const router = useRouter();
+  const pathname = usePathname();
+
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
+
+  useEffect(() => {
+    const restaurantId = pathname.split("/")[1];
+
+    if (restaurants.some((restaurant) => restaurant.value === restaurantId)) {
+      setValue(restaurantId);
+    }
+
+    console.log(restaurantId);
+  }, []);
+
+  useEffect(() => {
+    if (value) {
+      router.push(`/${value}`);
+    }
+  }, [value]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -45,19 +69,19 @@ const RestaurantsSwitcher = () => {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="justify-between group-data-[collapsible=icon]:hidden mt-2"
+          className="w-full justify-between"
         >
           {value
             ? restaurants.find((restaurant) => restaurant.value === value).label
-            : "Select a restaurant"}
+            : "Select restaurant"}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="start" className="p-0">
+      <PopoverContent className="w-full p-0" align="start">
         <Command>
-          <CommandInput placeholder="Search for a restaurant" />
+          <CommandInput placeholder="Search framework..." />
           <CommandList>
-            <CommandEmpty>No restaurants found</CommandEmpty>
+            <CommandEmpty>No framework found.</CommandEmpty>
             <CommandGroup>
               {restaurants.map((restaurant) => (
                 <CommandItem
@@ -83,6 +107,4 @@ const RestaurantsSwitcher = () => {
       </PopoverContent>
     </Popover>
   );
-};
-
-export default RestaurantsSwitcher;
+}

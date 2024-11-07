@@ -1,6 +1,8 @@
-import { cn } from "@/lib/utils";
 import { Inter } from "next/font/google";
+
 import "./globals.css";
+import { Toaster } from "@/components/ui/toaster";
+import { cn } from "@/lib/utils";
 import Providers from "@/providers";
 
 const inter = Inter({
@@ -17,14 +19,12 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={cn(
-          inter.className,
-          "antialiased dark:bg-neutral-950 dark:text-white",
-        )}
+        className={cn(inter.className, "antialiased bg-neutral-50 text-black")}
       >
         <Providers>{children}</Providers>
+        <Toaster />
       </body>
     </html>
   );

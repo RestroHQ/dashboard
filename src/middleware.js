@@ -7,17 +7,9 @@ async function middleware(req) {
   const isPublicRoute = publicRoutes.includes(url.pathname);
   const isAuthRoute = authRoutes.includes(url.pathname);
 
-  if (isAuthRoute) {
-    if (isAuthenticated) {
-      return Response.redirect(new URL(defaultRedirect, url));
-    }
-
-    return null;
-  }
-
-  if (!isPublicRoute && !isAuthenticated) {
-    return Response.redirect(new URL("/auth/sign-in", url));
-  }
+  // if (!isPublicRoute && !isAuthenticated) {
+  //   return Response.redirect(new URL("/auth/login", url));
+  // }
 }
 
 export const config = {
