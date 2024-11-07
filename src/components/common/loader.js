@@ -1,6 +1,13 @@
-const Loader = () => {
+import { cn } from "@/lib/utils";
+
+const Loader = ({ className }) => {
   return (
-    <div className="fixed top-0 bottom-0 left-0 right-0 z-[999] flex items-center justify-center bg-white">
+    <div
+      className={cn(
+        "fixed top-0 bottom-0 left-0 right-0 z-[999] flex items-center justify-center bg-white",
+        className,
+      )}
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"

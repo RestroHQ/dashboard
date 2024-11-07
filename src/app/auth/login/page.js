@@ -28,9 +28,10 @@ import LogoWithText from "@/components/common/LogoWithText";
 import { setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { useGetRestaurantQuery } from "@/hooks/use-restaurant";
+import { useAuth } from "@/hooks/use-auth";
 
 const formSchema = z.object({
-  username: z.string().min(2).max(50),
+  email: z.string().min(2).max(50),
   password: z.string().min(8).max(50),
 });
 
@@ -38,11 +39,12 @@ const Page = () => {
   const router = useRouter();
 
   const { data: restaurant } = useGetRestaurantQuery();
+  const { signIn } = useAuth();
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      email: "",
       password: "",
     },
   });
@@ -50,16 +52,7 @@ const Page = () => {
   const onSubmit = async (values) => {
     console.log(values);
 
-    setCookie("is_authenticated", true, {
-      maxAge: 60 * 60 * 24 * 7,
-    });
-
-    if (restaurant) {
-      router.push("/onboarding");
-      return;
-    }
-
-    router.push("/dashboard");
+    signIn(values);
   };
 
   return (
@@ -78,12 +71,12 @@ const Page = () => {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
                 control={form.control}
-                name="username"
+                name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Username</FormLabel>
+                    <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter your username" {...field} />
+                      <Input placeholder="Enter your email" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

@@ -1,13 +1,13 @@
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import Logo from "./Logo";
+import Logo from "./logo";
 
 const LogoWithText = ({ icon, text, asLink, className }) => {
   const Comp = asLink ? Link : "div";
   return (
     <Comp
       className={cn(
-        "flex gap-4 items-center mb-4",
+        "flex gap-4 items-center",
         className,
         asLink && "cursor-pointer",
       )}

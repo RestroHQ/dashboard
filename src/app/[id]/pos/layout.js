@@ -1,7 +1,7 @@
 import Page from "./page";
 
 export const metadata = {
-  title: "Overview",
+  title: "POS",
 };
 
 export default Page;
