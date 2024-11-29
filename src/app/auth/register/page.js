@@ -29,8 +29,7 @@ import { z } from "zod";
 
 const formSchema = z
   .object({
-    firstName: z.string().min(2).max(50),
-    lastName: z.string().min(2).max(50),
+    name: z.string().min(2).max(50),
     email: z.string().email(),
     username: z.string().min(2).max(50),
     password: z.string().min(8).max(50),
@@ -61,8 +60,7 @@ const Page = () => {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
+      name: "",
       email: "",
       username: "",
       password: "",
@@ -87,7 +85,8 @@ const Page = () => {
 
         <div className="absolute top-1/2 transform -translate-y-1/2 w-full left-4">
           <LogoWithText icon="text-white" text="text-white" asLink />
-          <h1 className="text-5xl font-bold max-w-md">
+
+          <h1 className="text-5xl font-bold max-w-md mt-4">
             All your restaurant needs, in one place.
           </h1>
         </div>
@@ -109,26 +108,12 @@ const Page = () => {
               >
                 <FormField
                   control={form.control}
-                  name="firstName"
+                  name="name"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>First Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter your first name" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="lastName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Last Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter your last name" {...field} />
+                        <Input placeholder="Enter your name" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -217,8 +202,8 @@ const Page = () => {
           <CardFooter>
             <p className="text-sm text-gray-500">
               Already have an account?{" "}
-              <Link href="/auth/sign-in" className="text-blue-500">
-                Sign in
+              <Link href="/auth/login" className="text-blue-500">
+                Login
               </Link>
             </p>
           </CardFooter>

@@ -1,9 +1,19 @@
-export const getRestaurant = async () => {
-  const response = localStorage.getItem("restaurant");
+export const getRestaurants = async () => {
+  try {
+    const response = await axiosClient.post("/restaurant");
 
-  if (response) {
-    return JSON.parse(response);
+    return response.data;
+  } catch (error) {
+    return error.response.data;
   }
+};
 
-  return {};
+export const getRestaurant = async (id) => {
+  try {
+    const response = await axiosClient.post(`/restaurant/${id}`);
+
+    return response.data;
+  } catch (error) {
+    return error.response.data;
+  }
 };

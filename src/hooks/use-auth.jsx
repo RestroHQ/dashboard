@@ -6,12 +6,19 @@ import { useRouter } from "next/navigation";
 import { axiosClient } from "@/lib/axios";
 import { useToast } from "./use-toast";
 import { queryClient } from "@/providers/react-query";
-import { signInWithCredentials, signUpWithCredentials } from "@/services/user";
+import {
+  loginWithCredentials,
+  registerWithCredentials,
+  signInWithCredentials,
+  signUpWithCredentials,
+} from "@/services/user";
 import {
   setStoredToken,
   getStoredToken,
   decodeToken,
   removeStoredToken,
+  setStoredUser,
+  removeStoredUser,
 } from "@/lib/auth";
 
 export function useAuth() {
@@ -36,9 +43,9 @@ export function useAuth() {
     retry: false,
   });
 
-  const signUp = useMutation({
+  const register = useMutation({
     mutationFn: async (credentials) => {
-      const { data } = await signUpWithCredentials(credentials);
+      const { data } = await registerWithCredentials(credentials);
 
       return data;
     },
@@ -48,7 +55,7 @@ export function useAuth() {
         description: "Please sign in to continue",
       });
 
-      router.push("/auth/sign-in");
+      router.push("/auth/login");
     },
     onError: (error) => {
       toast({
@@ -59,14 +66,19 @@ export function useAuth() {
     },
   });
 
-  const signIn = useMutation({
+  const login = useMutation({
     mutationFn: async (credentials) => {
-      const { data } = await signInWithCredentials(credentials);
+      const data = await loginWithCredentials(credentials);
 
       return data;
     },
     onSuccess: (data) => {
+      if (!data.token) {
+        throw new Error("No token");
+      }
+
       setStoredToken(data.token);
+      setStoredUser(data.user);
 
       queryClient.setQueryData(["auth"], data.user);
 
@@ -75,9 +87,17 @@ export function useAuth() {
         description: "Successfully logged in",
       });
 
-      router.push("/dashboard");
+      const restaurantId = data.user.restaurants[0]?.restaurantId;
+
+      if (restaurantId) {
+        router.push(`/${restaurantId}`);
+      } else {
+        router.push("/");
+      }
     },
     onError: (error) => {
+      console.log(error);
+
       toast({
         title: "Error",
         description: error.response?.data?.message || "Failed to login",
@@ -85,15 +105,16 @@ export function useAuth() {
     },
   });
 
-  const signOut = useMutation({
+  const logOut = useMutation({
     mutationFn: async () => {
       removeStoredToken();
+      removeStoredUser();
 
       queryClient.removeQueries({ queryKey: ["auth"] });
 
       toast({ title: "Success", description: "Successfully logged out" });
 
-      router.push("/auth/sign-in");
+      router.push("/auth/login");
     },
   });
 
@@ -101,9 +122,8 @@ export function useAuth() {
     user,
     isLoading,
     isAuthenticated: !!user,
-    signUp: signUp.mutate,
-    signIn: signIn.mutate,
-    signOut: signOut.mutate,
-    hasRole: (role) => user?.roles?.includes(role) ?? false,
+    register: register.mutate,
+    login: login.mutate,
+    logOut: logOut.mutate,
   };
 }

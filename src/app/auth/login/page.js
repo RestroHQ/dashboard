@@ -36,8 +36,7 @@ const formSchema = z.object({
 const Page = () => {
   const router = useRouter();
 
-  const { data: restaurant } = useGetRestaurantQuery();
-  const { signIn } = useAuth();
+  const { login } = useAuth();
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -48,16 +47,14 @@ const Page = () => {
   });
 
   const onSubmit = async (values) => {
-    console.log(values);
-
-    signIn(values);
+    login(values);
   };
 
   return (
     <section className="flex flex-col justify-center items-center h-screen">
       <LogoWithText asLink />
 
-      <Card className="w-96">
+      <Card className="w-96 mt-4">
         <CardHeader className="text-center">
           <CardTitle>Welcome back!</CardTitle>
           <CardDescription>
@@ -117,8 +114,8 @@ const Page = () => {
         <CardFooter>
           <p className="text-sm text-gray-500">
             Don&apos;t have an account?{" "}
-            <Link href="/auth/sign-up" className="text-blue-500">
-              Sign Up
+            <Link href="/auth/register" className="text-blue-500">
+              Register
             </Link>
           </p>
         </CardFooter>
