@@ -1,25 +1,21 @@
 "use client";
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import { axiosClient } from "@/lib/axios";
-import { useToast } from "./use-toast";
+import {
+  decodeToken,
+  getStoredToken,
+  removeStoredToken,
+  removeStoredUser,
+  setStoredToken,
+  setStoredUser,
+} from "@/lib/auth";
 import { queryClient } from "@/providers/react-query";
 import {
   loginWithCredentials,
   registerWithCredentials,
-  signInWithCredentials,
-  signUpWithCredentials,
-} from "@/services/user";
-import {
-  setStoredToken,
-  getStoredToken,
-  decodeToken,
-  removeStoredToken,
-  setStoredUser,
-  removeStoredUser,
-} from "@/lib/auth";
+} from "@/services/user.service";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { useToast } from "./use-toast";
 
 export function useAuth() {
   const router = useRouter();
@@ -50,12 +46,14 @@ export function useAuth() {
       return data;
     },
     onSuccess: (data) => {
-      toast({
-        title: "Success",
-        description: "Please sign in to continue",
-      });
+      if (data) {
+        toast({
+          title: "Success",
+          description: "Please sign in to continue",
+        });
 
-      router.push("/auth/login");
+        router.push("/auth/login");
+      }
     },
     onError: (error) => {
       toast({

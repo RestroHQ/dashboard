@@ -1,4 +1,4 @@
-import { getRestaurant } from "@/services/restaurant";
+import { getRestaurant } from "@/services/restaurant.service";
 import { useQuery } from "@tanstack/react-query";
 
 export const useGetRestaurantQuery = () => {
