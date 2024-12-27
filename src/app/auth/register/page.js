@@ -19,11 +19,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useAuth } from "@/hooks/use-auth";
+import { useToast } from "@/hooks/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@iconify/react";
 import signUpImage from "@public/images/auth/sign-up.jpg";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -31,9 +34,11 @@ const formSchema = z
   .object({
     name: z.string().min(2).max(50),
     email: z.string().email(),
-    username: z.string().min(2).max(50),
+    username: z.string().max(15).optional(),
+    phone: z.string().max(15).optional(),
     password: z.string().min(8).max(50),
     confirmPassword: z.string().min(8).max(50),
+    image: z.any().optional(),
   })
   .superRefine((data) => {
     if (data.password !== data.confirmPassword) {
@@ -57,19 +62,70 @@ const formSchema = z
   });
 
 const Page = () => {
+  const [previewImage, setPreviewImage] = useState(null);
+
+  const { register } = useAuth();
+  const { toast } = useToast();
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
       email: "",
       username: "",
+      phone: "",
       password: "",
       confirmPassword: "",
+      image: undefined,
     },
   });
 
+  const handleFileChange = (event) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+
+      form.setValue("image", file);
+    }
+  };
+
+  const handleRemoveFile = () => {
+    form.setValue("image", undefined);
+    setPreviewImage(null);
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
   const onSubmit = async (values) => {
-    console.log(values);
+    const formData = new FormData();
+
+    if (values.image) {
+      formData.append("image", values.image);
+      values.image = undefined;
+    }
+
+    Object.entries(values).forEach(([key, value]) => {
+      if (value) {
+        formData.append(key, value);
+      }
+    });
+
+    try {
+      register(formData);
+    } catch (error) {
+      console.error("Submission error:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to create account",
+      });
+    }
   };
 
   return (
@@ -111,9 +167,11 @@ const Page = () => {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>First Name</FormLabel>
+                      <FormLabel>
+                        Name <span className="text-red-500">*</span>
+                      </FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter your name" {...field} />
+                        <Input placeholder="Kai Rivers" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -125,9 +183,14 @@ const Page = () => {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>
+                        Email <span className="text-red-500">*</span>
+                      </FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter your email" {...field} />
+                        <Input
+                          placeholder="kairivers@cuisineworld.com"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -141,7 +204,21 @@ const Page = () => {
                     <FormItem>
                       <FormLabel>Username</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter your username" {...field} />
+                        <Input placeholder="kairivers" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="phone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Phone</FormLabel>
+                      <FormControl>
+                        <Input placeholder="+94771234567" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -153,11 +230,13 @@ const Page = () => {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Password</FormLabel>
+                      <FormLabel>
+                        Password <span className="text-red-500">*</span>
+                      </FormLabel>
                       <FormControl>
                         <Input
                           type="password"
-                          placeholder="Enter your password"
+                          placeholder="••••••••••••••"
                           {...field}
                         />
                       </FormControl>
@@ -171,11 +250,13 @@ const Page = () => {
                   name="confirmPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Password</FormLabel>
+                      <FormLabel>
+                        Confirm Password <span className="text-red-500">*</span>
+                      </FormLabel>
                       <FormControl>
                         <Input
                           type="password"
-                          placeholder="Confirm your password"
+                          placeholder="••••••••••••••"
                           {...field}
                         />
                       </FormControl>
@@ -184,20 +265,25 @@ const Page = () => {
                   )}
                 />
 
+                <FormField
+                  control={form.control}
+                  name="image"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Image</FormLabel>
+                      <FormControl>
+                        <Input type="file" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
                 <Button type="submit" className="w-full">
-                  Sign In
+                  Register
                 </Button>
               </form>
             </Form>
-
-            <p className="text-sm text-gray-500 mt-4 text-center">
-              Or sign in with
-            </p>
-
-            <Button className="w-full mt-2" variant="secondary">
-              <Icon icon="devicon:google" />
-              <span>Google</span>
-            </Button>
           </CardContent>
           <CardFooter>
             <p className="text-sm text-gray-500">
