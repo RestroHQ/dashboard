@@ -4,7 +4,10 @@ import LogoWithText from "@/components/common/logo-with-text";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { useFileUpload } from "@/hooks/use-files";
-import { useCreateRestaurantMutation } from "@/hooks/use-restaurant";
+import {
+  useCreateRestaurantMutation,
+  useUpdateRestaurantMutation,
+} from "@/hooks/use-restaurant";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 
@@ -23,9 +26,7 @@ import { useRouter } from "next/navigation";
 
 const OnboardingWizard = ({ className }) => {
   const router = useRouter();
-
   const { toast } = useToast();
-
   const [step, setStep] = useState(0);
   const [files, setFiles] = useState({ logo: null, coverImage: null });
 
@@ -35,11 +36,8 @@ const OnboardingWizard = ({ className }) => {
   });
 
   const { mutateAsync: mutateFileUpload } = useFileUpload({
-    onSuccess: () => {
-      console.log("File upload completed");
-    },
     onError: (error) => {
-      console.error("Error uploading file:", error);
+      console.error("Error handling file:", error);
     },
   });
 
@@ -55,42 +53,84 @@ const OnboardingWizard = ({ className }) => {
     },
   });
 
-  const onSubmit = async (values) => {
-    try {
-      const restaurantId = createId();
+  const { mutateAsync: updateRestaurant } = useUpdateRestaurantMutation({});
 
-      if (files.logo) {
+  const uploadFiles = async (restaurantId) => {
+    const uploadedFiles = {};
+    const uploadErrors = [];
+
+    if (files.logo) {
+      try {
         const { path } = await mutateFileUpload({
           file: files.logo,
           type: "LOGO",
           entityId: restaurantId,
         });
-
-        values.logo = path;
+        uploadedFiles.logo = path;
+      } catch (error) {
+        uploadErrors.push("Logo upload failed");
       }
+    }
 
-      if (files.coverImage) {
+    if (files.coverImage) {
+      try {
         const { path } = await mutateFileUpload({
           file: files.coverImage,
           type: "COVER",
           entityId: restaurantId,
         });
+        uploadedFiles.coverImage = path;
+      } catch (error) {
+        uploadErrors.push("Cover image upload failed");
+      }
+    }
 
-        values.coverImage = path;
+    if (uploadErrors.length > 0) {
+      toast({
+        title: "File Upload Warning",
+        description: (
+          <ul className="list-disc pl-4">
+            {uploadErrors.map((error, index) => (
+              <li key={index}>{error}</li>
+            ))}
+          </ul>
+        ),
+        variant: "destructive",
+      });
+    }
+
+    return uploadedFiles;
+  };
+
+  const onSubmit = async (values) => {
+    const restaurantId = createId();
+
+    try {
+      await mutateCreateRestaurant({
+        id: restaurantId,
+        ...values,
+        logo: null,
+        coverImage: null,
+      });
+
+      const uploadedFiles = await uploadFiles(restaurantId);
+
+      if (Object.keys(uploadedFiles).length > 0) {
+        await updateRestaurant({
+          id: restaurantId,
+          ...uploadedFiles,
+        });
       }
 
-      await mutateCreateRestaurant({ id: restaurantId, ...values });
-
-      // form.reset();
-      // setFiles({ logo: null, coverImage: null });
-
-      // router.push(`/${restaurantId}`);
+      form.reset();
+      setFiles({ logo: null, coverImage: null });
+      router.push(`/${restaurantId}`);
     } catch (error) {
       console.error("Error submitting form:", error);
-
       toast({
         title: "Error",
-        description: "An error occurred. Please try again.",
+        description:
+          "An error occurred while creating the restaurant. Please try again.",
         variant: "destructive",
       });
     }
@@ -112,17 +152,17 @@ const OnboardingWizard = ({ className }) => {
   };
 
   const tabs = [
-    { name: "Basic Infomation", component: <BasicInfo form={form} /> },
+    { name: "Basic Information", component: <BasicInfo form={form} /> },
     { name: "Contact Information", component: <ContactInfo form={form} /> },
     { name: "Operating Hours", component: <Hours form={form} /> },
     {
-      name: "Additional Infomation",
+      name: "Additional Information",
       component: <Additional form={form} files={files} setFiles={setFiles} />,
     },
   ];
 
   return (
-    <secion
+    <section
       className={cn(
         "min-h-screen flex flex-col justify-center items-center py-8 px-4",
         className,
@@ -196,7 +236,7 @@ const OnboardingWizard = ({ className }) => {
           </Form>
         </section>
       </section>
-    </secion>
+    </section>
   );
 };
 

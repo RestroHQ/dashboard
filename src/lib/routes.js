@@ -1,6 +1,11 @@
-export const publicRoutes = [];
+export const publicRoutes = ["/not-found"];
 
-export const authRoutes = ["/auth/login", "/auth/register", "/auth/error"];
+export const authRoutes = [
+  "/auth/login",
+  "/auth/register",
+  "/auth/error",
+  "/auth/err",
+];
 
 export const superAdminRoutes = ["/"];
 
