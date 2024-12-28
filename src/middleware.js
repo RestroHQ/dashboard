@@ -1,15 +1,34 @@
 import { authRoutes, defaultRedirect, publicRoutes } from "@/lib/routes";
+import { getCookie } from "cookies-next";
+import { NextResponse } from "next/server";
+import { AUTH_TOKEN_KEY } from "./lib/auth";
 
 async function middleware(req) {
+  const res = NextResponse.next();
+
   const { nextUrl: url } = req;
-  const isAuthenticated = req.cookies.get("is_authenticated");
+  const token = await getCookie(AUTH_TOKEN_KEY, { res, req });
 
   const isPublicRoute = publicRoutes.includes(url.pathname);
   const isAuthRoute = authRoutes.includes(url.pathname);
 
-  // if (!isPublicRoute && !isAuthenticated) {
-  //   return Response.redirect(new URL("/auth/login", url));
-  // }
+  if (isPublicRoute) {
+    return res;
+  }
+
+  if (isAuthRoute) {
+    if (!token) {
+      return res;
+    }
+
+    return Response.redirect(new URL(defaultRedirect, url));
+  }
+
+  if (!token) {
+    return Response.redirect(new URL("/auth/login", url));
+  }
+
+  return res;
 }
 
 export const config = {

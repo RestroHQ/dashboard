@@ -1,6 +1,6 @@
 import { axiosClient } from "@/lib/axios";
 
-export const signInWithCredentials = async (data) => {
+export const loginWithCredentials = async (data) => {
   try {
     const response = await axiosClient.post("/auth/login", data);
 
@@ -10,7 +10,7 @@ export const signInWithCredentials = async (data) => {
   }
 };
 
-export const signUpWithCredentials = async (data) => {
+export const registerWithCredentials = async (data) => {
   try {
     const response = await axiosClient.post("/auth/register", data);
 
