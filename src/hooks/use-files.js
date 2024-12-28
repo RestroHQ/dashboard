@@ -1,16 +1,30 @@
-import { getFileDownloadUrl, getFileUplaodUrl } from "@/services/file.service";
+import { queryClient } from "@/providers/react-query";
+import { getUploadUrl, uploadToS3 } from "@/services/file.service";
 import { useMutation } from "@tanstack/react-query";
 
-export const useFileUploadUrlMutation = () => {
-  return useMutation({
-    mutationKey: ["file-upload-url"],
-    mutationFn: async (data) => await getFileUplaodUrl(data),
-  });
-};
+export const useFileUpload = ({ type, entityId, onSuccess, onProgress }) => {
+  const uploadMutation = useMutation({
+    mutationFn: async (file) => {
+      const { uploadUrl, fileName, path } = await getUploadUrl({
+        fileName: file.name,
+        contentType: file.type,
+        fileSize: file.size,
+        type,
+        entityId,
+      });
 
-export const useFileDownloadUrlMutation = () => {
-  return useMutation({
-    mutationKey: ["file-download-url"],
-    mutationFn: async (data) => await getFileDownloadUrl(data),
+      await uploadToS3(uploadUrl, file, onProgress);
+
+      return { fileName, path };
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [`${type.toLowerCase()}-image`],
+      });
+
+      console.log("File uploaded successfully");
+    },
   });
+
+  return uploadMutation;
 };
