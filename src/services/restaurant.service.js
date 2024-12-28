@@ -17,3 +17,13 @@ export const getRestaurant = async (id) => {
     return error.response.data;
   }
 };
+
+export const createRestaurant = async (data) => {
+  try {
+    const response = await axiosClient.post("/restaurant", data);
+
+    return response.data;
+  } catch (error) {
+    return error.response.data;
+  }
+};

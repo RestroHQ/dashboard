@@ -68,7 +68,7 @@ const Page = () => {
   const { register } = useAuth();
   const { toast } = useToast();
 
-  const handleUploadSuccess = (data) => {
+  const handleUploadSuccess = () => {
     console.log("File upload completed");
   };
 
