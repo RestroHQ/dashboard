@@ -15,7 +15,11 @@ export const restaurantSchema = z.object({
   address: z.string().optional(),
   phone: z.string().optional(),
   email: z.string().email("Invalid email address"),
-  website: z.string().url("Invalid website URL").optional().nullable(),
+  website: z
+    .string()
+    .url({ message: "Invalid website URL" })
+    .optional()
+    .nullable(),
   logo: z.string().optional(),
   coverImage: z.string().optional(),
   cuisineType: z.string().min(2, "Cuisine type must be at least 2 characters"),
@@ -49,7 +53,7 @@ export const defaultValues = {
   address: "",
   email: "",
   phone: "",
-  website: undefined,
+  website: "",
   logo: "",
   coverImage: "",
   cuisineType: "",

@@ -45,8 +45,6 @@ const OnboardingWizard = ({ className }) => {
 
   const { mutateAsync: mutateCreateRestaurant } = useCreateRestaurantMutation({
     onSuccess: () => {
-      form.reset();
-
       toast({
         title: "Success",
         description: "Restaurant details saved successfully!",
@@ -81,12 +79,12 @@ const OnboardingWizard = ({ className }) => {
         values.coverImage = path;
       }
 
-      await mutateCreateRestaurant(values);
+      await mutateCreateRestaurant({ id: restaurantId, ...values });
 
-      form.reset();
-      setFiles({ logo: null, coverImage: null });
+      // form.reset();
+      // setFiles({ logo: null, coverImage: null });
 
-      router.push(`/${restaurantId}`);
+      // router.push(`/${restaurantId}`);
     } catch (error) {
       console.error("Error submitting form:", error);
 
