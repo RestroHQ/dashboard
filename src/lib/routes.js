@@ -1,5 +1,5 @@
-export const publicRoutes = [];
+export const publicRoutes = ["/unauthorized"];
 
 export const authRoutes = ["/auth/login", "/auth/register"];
 
-export const defaultRedirect = "/";
+export const superAdminRoutes = ["/"];
