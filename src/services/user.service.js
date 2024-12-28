@@ -6,7 +6,7 @@ export const loginWithCredentials = async (data) => {
 
     return response.data;
   } catch (error) {
-    return error.response.data;
+    throw error;
   }
 };
 
@@ -16,6 +16,6 @@ export const registerWithCredentials = async (data) => {
 
     return response.data;
   } catch (error) {
-    return error.response.data;
+    throw error;
   }
 };
