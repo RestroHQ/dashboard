@@ -3,10 +3,11 @@ import { getRestaurant, updateRestaurant } from "@/services/restaurant.service";
 import { createRestaurant } from "@/services/restaurant.service";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-export const useGetRestaurantQuery = () => {
+export const useGetRestaurantQuery = (id) => {
   return useQuery({
-    queryKey: ["restaurant"],
-    queryFn: getRestaurant,
+    queryKey: ["restaurant", id],
+    queryFn: () => getRestaurant(id),
+    enabled: !!id,
   });
 };
 

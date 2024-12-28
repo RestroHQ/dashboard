@@ -6,7 +6,7 @@ import {
 } from "@/lib/routes";
 import { getCookie } from "cookies-next";
 import { NextResponse } from "next/server";
-import { AUTH_TOKEN_KEY } from "./lib/auth";
+import { AUTH_TOKEN_KEY } from "./services/cookies.service";
 
 const middleware = async (req) => {
   const { nextUrl: url } = req;

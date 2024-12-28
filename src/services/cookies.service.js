@@ -46,3 +46,21 @@ export const getStoredUser = () => {
 export const removeStoredUser = () => {
   deleteCookie("user");
 };
+
+export const setCurrentRestaurant = (restaurantId) => {
+  setCookie("restaurantId", JSON.stringify(restaurantId), {
+    maxAge: 60 * 60 * 24 * 7,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+  });
+};
+
+export const getCurrentRestaurant = () => {
+  const restaurantId = getCookie("restaurantId");
+
+  return restaurantId || null;
+};
+
+export const removeCurrentRestaurant = () => {
+  deleteCookie("restaurantId");
+};

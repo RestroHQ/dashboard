@@ -7,7 +7,7 @@ import {
   removeStoredUser,
   setStoredToken,
   setStoredUser,
-} from "@/lib/auth";
+} from "@/services/cookies.service";
 import { queryClient } from "@/providers/react-query";
 import {
   loginWithCredentials,

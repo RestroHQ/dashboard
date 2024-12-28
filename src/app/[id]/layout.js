@@ -5,11 +5,15 @@ export const metadata = {
   title: "App",
 };
 
-export default function Layout({ children }) {
+const Layout = async ({ params, children }) => {
+  const id = (await params).id;
+
   return (
     <SidebarProvider>
-      <Sidebar />
+      <Sidebar id={id} />
       <main className="m-4 w-full">{children}</main>
     </SidebarProvider>
   );
-}
+};
+
+export default Layout;

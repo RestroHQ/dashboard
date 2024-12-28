@@ -1,5 +1,5 @@
+import { AUTH_TOKEN_KEY } from "@/services/cookies.service";
 import axios from "axios";
-import { AUTH_TOKEN_KEY } from "./auth";
 import { getCookie } from "cookies-next";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;

@@ -24,7 +24,7 @@ import { useState } from "react";
 import LogoWithText from "../common/logo-with-text";
 import { RestaurantSwitcher } from "./restaurant-switcher";
 
-export default function Sidebar({ className }) {
+export default function Sidebar({ id, className }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const pathname = usePathname();
 
@@ -32,67 +32,67 @@ export default function Sidebar({ className }) {
     {
       label: "Dashboard",
       icon: LayoutDashboard,
-      href: "/dashboard",
+      href: `/${id}`,
       color: "text-sky-500",
     },
     {
       label: "POS",
       icon: Store,
-      href: "/dashboard/pos",
+      href: `/${id}/pos`,
       color: "text-violet-500",
     },
     {
       label: "Menu Management",
       icon: Menu,
-      href: "/dashboard/menu",
+      href: `/${id}/menu`,
       color: "text-pink-500",
     },
     {
       label: "Orders",
       icon: ClipboardList,
-      href: "/dashboard/orders",
+      href: `/${id}/orders`,
       color: "text-orange-500",
     },
     {
       label: "Reservations",
       icon: CalendarDays,
-      href: "/dashboard/reservations",
+      href: `/${id}/reservations`,
       color: "text-emerald-500",
     },
     {
       label: "Customers",
       icon: Users,
-      href: "/dashboard/customers",
+      href: `/${id}/customers`,
       color: "text-blue-500",
     },
     {
       label: "Reviews",
       icon: Star,
-      href: "/dashboard/reviews",
+      href: `/${id}/reviews`,
       color: "text-yellow-500",
     },
     {
       label: "Analytics",
       icon: BarChart3,
-      href: "/dashboard/analytics",
+      href: `/${id}/analytics`,
       color: "text-green-500",
     },
     {
       label: "Marketing",
       icon: Mail,
-      href: "/dashboard/marketing",
+      href: `/${id}/marketing`,
       color: "text-purple-500",
     },
     {
       label: "Settings",
       icon: Settings,
-      href: "/dashboard/settings",
+      href: `/${id}/settings`,
       color: "text-gray-500",
     },
     {
       label: "Help & Support",
       icon: HelpCircle,
-      href: "/dashboard/support",
+      href: `/${id}/support`,
       color: "text-indigo-500",
     },
   ];
@@ -111,7 +111,7 @@ export default function Sidebar({ className }) {
           isCollapsed && "justify-center",
         )}
       >
-        <Link href="/dashboard">
+        <Link href="/">
           <LogoWithText
             icon="h-6 w-6"
             text={cn("text-xl", isCollapsed && "hidden")}
