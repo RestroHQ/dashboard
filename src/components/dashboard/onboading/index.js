@@ -19,11 +19,15 @@ import { BasicInfo } from "./basic";
 import { ContactInfo } from "./contact";
 import { Hours } from "./hours";
 import { defaultValues, restaurantSchema } from "./schema";
+import { useRouter } from "next/navigation";
 
 const OnboardingWizard = ({ className }) => {
+  const router = useRouter();
+
   const { toast } = useToast();
 
   const [step, setStep] = useState(0);
+  const [files, setFiles] = useState({ logo: null, coverImage: null });
 
   const form = useForm({
     resolver: zodResolver(restaurantSchema),
@@ -57,9 +61,9 @@ const OnboardingWizard = ({ className }) => {
     try {
       const restaurantId = createId();
 
-      if (values.logo) {
+      if (files.logo) {
         const { path } = await mutateFileUpload({
-          file: values.logo,
+          file: files.logo,
           type: "LOGO",
           entityId: restaurantId,
         });
@@ -67,9 +71,9 @@ const OnboardingWizard = ({ className }) => {
         values.logo = path;
       }
 
-      if (values.coverImage) {
+      if (files.coverImage) {
         const { path } = await mutateFileUpload({
-          file: values.coverImage,
+          file: files.coverImage,
           type: "COVER",
           entityId: restaurantId,
         });
@@ -78,7 +82,14 @@ const OnboardingWizard = ({ className }) => {
       }
 
       await mutateCreateRestaurant(values);
+
+      form.reset();
+      setFiles({ logo: null, coverImage: null });
+
+      router.push(`/${restaurantId}`);
     } catch (error) {
+      console.error("Error submitting form:", error);
+
       toast({
         title: "Error",
         description: "An error occurred. Please try again.",
@@ -103,10 +114,13 @@ const OnboardingWizard = ({ className }) => {
   };
 
   const tabs = [
-    { name: "Basic Info", component: <BasicInfo form={form} /> },
-    { name: "Contact", component: <ContactInfo form={form} /> },
-    { name: "Hours", component: <Hours form={form} /> },
-    { name: "Additional Info", component: <Additional form={form} /> },
+    { name: "Basic Infomation", component: <BasicInfo form={form} /> },
+    { name: "Contact Information", component: <ContactInfo form={form} /> },
+    { name: "Operating Hours", component: <Hours form={form} /> },
+    {
+      name: "Additional Infomation",
+      component: <Additional form={form} files={files} setFiles={setFiles} />,
+    },
   ];
 
   return (
@@ -156,6 +170,7 @@ const OnboardingWizard = ({ className }) => {
               <div className="grid grid-cols-2 gap-4 mt-8">
                 <Button
                   type="button"
+                  variant="outline"
                   onClick={() => setStep(step - 1)}
                   disabled={step === 0}
                 >
@@ -163,8 +178,12 @@ const OnboardingWizard = ({ className }) => {
                 </Button>
 
                 {step !== tabs.length - 1 ? (
-                  <Button type="button" onClick={() => setStep(step + 1)}>
-                    Next
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={() => setStep(step + 1)}
+                  >
+                    Continue
                   </Button>
                 ) : (
                   <Button

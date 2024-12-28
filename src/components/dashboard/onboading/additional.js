@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-export const Additional = ({ form }) => {
+export const Additional = ({ form, files, setFiles }) => {
   return (
     <div className="space-y-4">
       <FormField
@@ -54,10 +54,8 @@ export const Additional = ({ form }) => {
                   type="file"
                   accept="image/*"
                   onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      field.onChange(URL.createObjectURL(file));
-                    }
+                    const file = e.target.files[0];
+                    setFiles({ ...files, logo: file });
                   }}
                 />
               </FormControl>
@@ -77,10 +75,8 @@ export const Additional = ({ form }) => {
                   type="file"
                   accept="image/*"
                   onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      field.onChange(URL.createObjectURL(file));
-                    }
+                    const file = e.target.files[0];
+                    setFiles({ ...files, coverImage: file });
                   }}
                 />
               </FormControl>

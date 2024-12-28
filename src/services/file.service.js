@@ -18,7 +18,7 @@ export const getUploadUrl = async ({
 
     return data;
   } catch (error) {
-    return error.response.data;
+    return error.response?.data;
   }
 };
 
@@ -38,7 +38,7 @@ export const uploadToS3 = async (uploadUrl, file, onProgress) => {
 
     return response.data;
   } catch (error) {
-    return error.response.data;
+    return error.response?.data;
   }
 };
 
@@ -48,6 +48,6 @@ export const getFileDownloadUrl = async (data) => {
 
     return response.data;
   } catch (error) {
-    return error.response.data;
+    return error.response?.data;
   }
 };
