@@ -20,13 +20,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/use-auth";
+import { useFileUpload } from "@/hooks/use-files";
 import { useToast } from "@/hooks/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Icon } from "@iconify/react";
+import { createId } from "@paralleldrive/cuid2";
 import signUpImage from "@public/images/auth/sign-up.jpg";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -62,10 +63,17 @@ const formSchema = z
   });
 
 const Page = () => {
-  const [previewImage, setPreviewImage] = useState(null);
+  const router = useRouter();
 
   const { register } = useAuth();
   const { toast } = useToast();
+
+  const userId = createId();
+
+  const { mutateAsync } = useFileUpload({
+    type: "AVATAR",
+    entityId: userId,
+  });
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -80,44 +88,29 @@ const Page = () => {
     },
   });
 
-  const handleFileChange = (event) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-
-      form.setValue("image", file);
-    }
-  };
-
-  const handleRemoveFile = () => {
-    form.setValue("image", undefined);
-    setPreviewImage(null);
-
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  };
-
   const onSubmit = async (values) => {
-    const formData = new FormData();
-
-    if (values.image) {
-      formData.append("image", values.image);
-      values.image = undefined;
-    }
-
-    Object.entries(values).forEach(([key, value]) => {
-      if (value) {
-        formData.append(key, value);
-      }
-    });
-
     try {
-      register(formData);
+      if (values.image) {
+        const file = document.querySelector('input[name="image"]').files[0];
+
+        const { path } = await mutateAsync(file);
+
+        values.image = path;
+      } else {
+        console.log("No image selected");
+      }
+
+      register({ id: userId, ...values });
+
+      toast({
+        variant: "success",
+        title: "Success",
+        description: "Account created successfully",
+      });
+
+      form.reset();
+
+      router.push("/auth/login");
     } catch (error) {
       console.error("Submission error:", error);
       toast({

@@ -85,9 +85,9 @@ export function useAuth() {
         description: "Successfully logged in",
       });
 
-      const restaurantId = data.user.restaurants[0]?.restaurantId;
+      if (data.user?.restaurants?.length) {
+        const restaurantId = data.user?.restaurants[0]?.restaurantId;
 
-      if (restaurantId) {
         router.push(`/${restaurantId}`);
       } else {
         router.push("/");

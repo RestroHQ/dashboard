@@ -1,9 +1,15 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import LogoWithText from "@/components/common/logo-with-text";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -13,20 +19,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import Link from "next/link";
-import { Icon } from "@iconify/react";
-import LogoWithText from "@/components/common/logo-with-text";
-import { useRouter } from "next/navigation";
-import { useGetRestaurantQuery } from "@/hooks/use-restaurant";
 import { useAuth } from "@/hooks/use-auth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 const formSchema = z.object({
   email: z.string().min(2).max(50),
@@ -101,15 +99,6 @@ const Page = () => {
               </Button>
             </form>
           </Form>
-
-          <p className="text-sm text-gray-500 mt-4 text-center">
-            Or sign in with
-          </p>
-
-          <Button className="w-full mt-2" variant="secondary">
-            <Icon icon="devicon:google" />
-            <span>Google</span>
-          </Button>
         </CardContent>
         <CardFooter>
           <p className="text-sm text-gray-500">
