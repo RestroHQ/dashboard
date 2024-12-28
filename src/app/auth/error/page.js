@@ -27,17 +27,17 @@ export default function ErrorPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-gray-900">
+    <div className="container max-w-3xl text-center flex flex-col items-center justify-center min-h-screen">
       <h1 className="text-6xl font-bold text-red-500">{errorCode}</h1>
       <h2 className="text-2xl font-semibold mt-4">
         {errorMessages[errorCode].title}
       </h2>
       <p className="text-lg mt-2 text-gray-600">
         {errorMessages[errorCode].message || "An error occurred."} Please
-        contact the administrator to resolve this issue.
+        contact the administrator to resolve this issue and try again.
       </p>
       <Button onClick={logOut} className="mt-6">
-        Go to Home
+        Log Out
       </Button>
     </div>
   );
