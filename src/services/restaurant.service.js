@@ -1,29 +1,35 @@
+import { axiosClient } from "@/lib/axios";
+
 export const getRestaurants = async () => {
   try {
-    const response = await axiosClient.post("/restaurant");
+    const response = await axiosClient.get("/restaurants");
 
     return response.data;
   } catch (error) {
-    return error.response?.data;
+    return error;
   }
 };
 
 export const getRestaurant = async (id) => {
   try {
-    const response = await axiosClient.post(`/restaurant/${id}`);
+    const response = await axiosClient.get(`/restaurants/${id}`);
 
     return response.data;
   } catch (error) {
-    return error.response?.data;
+    console.log("Error fetching restaurant:", error);
+
+    return error;
   }
 };
 
 export const createRestaurant = async (data) => {
   try {
-    const response = await axiosClient.post("/restaurant", data);
+    const response = await axiosClient.post("/restaurants", data);
+
+    console.log("Error fetching restaurant:", error);
 
     return response.data;
   } catch (error) {
-    return error.response?.data;
+    return error;
   }
 };

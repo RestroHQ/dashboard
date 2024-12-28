@@ -13,9 +13,14 @@ export const useGetRestaurantQuery = () => {
 export const useCreateRestaurantMutation = ({ onSuccess, onError }) => {
   return useMutation({
     mutationKey: "create-restaurant",
-    mutationFn: createRestaurant,
+    mutationFn: async (data) => {
+      return createRestaurant(data);
+    },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["restaurant"] });
+
+      localStorage.setItem("restaurantId", data.id);
+
       onSuccess?.(data);
     },
     onError: (error) => {
