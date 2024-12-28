@@ -1,4 +1,4 @@
-import OnboardingWizard from "@/components/dashboard/onboading/wizard";
+import OnboardingWizard from "@/components/dashboard/onboading";
 
 const Home = () => {
   return (
