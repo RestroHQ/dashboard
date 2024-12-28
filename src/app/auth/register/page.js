@@ -68,11 +68,17 @@ const Page = () => {
   const { register } = useAuth();
   const { toast } = useToast();
 
-  const userId = createId();
+  const handleUploadSuccess = (data) => {
+    console.log("File upload completed");
+  };
+
+  const handleUploadError = (error) => {
+    console.error("Upload error:", error);
+  };
 
   const { mutateAsync } = useFileUpload({
-    type: "AVATAR",
-    entityId: userId,
+    onSuccess: handleUploadSuccess,
+    onError: handleUploadError,
   });
 
   const form = useForm({
@@ -90,10 +96,16 @@ const Page = () => {
 
   const onSubmit = async (values) => {
     try {
+      const userId = createId();
+
       if (values.image) {
         const file = document.querySelector('input[name="image"]').files[0];
 
-        const { path } = await mutateAsync(file);
+        const { path } = await mutateAsync({
+          file,
+          type: "AVATAR",
+          entityId: userId,
+        });
 
         values.image = path;
       } else {
