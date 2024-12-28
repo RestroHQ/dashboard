@@ -54,7 +54,7 @@ export const defaultValues = {
   coverImage: "",
   cuisineType: "",
   openingTime: "09:00",
-  closingTime: "17:00",
+  closingTime: "23:00",
   openDays: [],
   taxNumber: "",
   description: "",

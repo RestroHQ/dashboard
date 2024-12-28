@@ -15,11 +15,11 @@ export const useFileUpload = ({ onSuccess, onError, onProgress }) => {
 
       await uploadToS3(uploadUrl, file, onProgress);
 
-      return { fileName, path };
+      return { fileName, path, type };
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({
-        queryKey: [`${type.toLowerCase()}-image`],
+        queryKey: [`${data?.type.toLowerCase()}-image`],
       });
 
       onSuccess?.(data);

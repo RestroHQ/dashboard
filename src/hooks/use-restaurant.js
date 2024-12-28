@@ -14,9 +14,9 @@ export const useCreateRestaurantMutation = ({ onSuccess, onError }) => {
   return useMutation({
     mutationKey: "create-restaurant",
     mutationFn: createRestaurant,
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["restaurant"] });
-      onSuccess?.();
+      onSuccess?.(data);
     },
     onError: (error) => {
       onError?.(error);

@@ -19,7 +19,7 @@ export const ContactInfo = ({ form }) => {
             <FormLabel>Address</FormLabel>
             <FormControl>
               <Textarea
-                placeholder="Full address"
+                placeholder="123, Street Name, City, Country"
                 className="resize-none"
                 {...field}
                 rows={2}
@@ -38,11 +38,7 @@ export const ContactInfo = ({ form }) => {
             <FormItem>
               <FormLabel>Email *</FormLabel>
               <FormControl>
-                <Input
-                  type="email"
-                  placeholder="contact@restaurant.com"
-                  {...field}
-                />
+                <Input type="email" placeholder="contact@tgr.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -71,11 +67,7 @@ export const ContactInfo = ({ form }) => {
           <FormItem>
             <FormLabel>Website</FormLabel>
             <FormControl>
-              <Input
-                type="url"
-                placeholder="https://restaurant.com"
-                {...field}
-              />
+              <Input type="url" placeholder="https://tgr.com" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>

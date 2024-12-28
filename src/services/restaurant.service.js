@@ -4,7 +4,7 @@ export const getRestaurants = async () => {
 
     return response.data;
   } catch (error) {
-    return error.response.data;
+    return error.response?.data;
   }
 };
 
@@ -14,7 +14,7 @@ export const getRestaurant = async (id) => {
 
     return response.data;
   } catch (error) {
-    return error.response.data;
+    return error.response?.data;
   }
 };
 
@@ -24,6 +24,6 @@ export const createRestaurant = async (data) => {
 
     return response.data;
   } catch (error) {
-    return error.response.data;
+    return error.response?.data;
   }
 };
