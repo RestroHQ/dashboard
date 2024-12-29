@@ -1,14 +1,13 @@
 "use client";
 
+import { queryClient } from "@/providers/react-query";
 import {
   decodeToken,
-  getStoredToken,
-  removeStoredToken,
-  removeStoredUser,
-  setStoredToken,
-  setStoredUser,
-} from "@/lib/auth";
-import { queryClient } from "@/providers/react-query";
+  getTokenCookie,
+  removeTokenCookie,
+  setCurrentRestaurant,
+  setTokenCookie,
+} from "@/services/cookies.service";
 import {
   loginWithCredentials,
   registerWithCredentials,
@@ -24,7 +23,7 @@ export function useAuth() {
   const { data: user, isLoading } = useQuery({
     queryKey: ["auth"],
     queryFn: async () => {
-      const token = getStoredToken();
+      const token = getTokenCookie();
       if (!token) {
         throw new Error("No token");
       }
@@ -75,8 +74,7 @@ export function useAuth() {
         throw new Error("No token");
       }
 
-      setStoredToken(data.token);
-      setStoredUser(data.user);
+      setTokenCookie(data.token);
 
       queryClient.setQueryData(["auth"], data.user);
 
@@ -85,8 +83,9 @@ export function useAuth() {
         description: "Successfully logged in",
       });
 
-      if (data.user?.restaurants?.length) {
-        const restaurantId = data.user?.restaurants[0]?.restaurantId;
+      if (data.user?.staffAt?.length) {
+        const restaurantId = data.user?.staffAt[0].restaurantId;
+        setCurrentRestaurant(restaurantId);
 
         router.push(`/${restaurantId}`);
       } else {
@@ -105,8 +104,7 @@ export function useAuth() {
 
   const logOut = useMutation({
     mutationFn: async () => {
-      removeStoredToken();
-      removeStoredUser();
+      removeTokenCookie();
 
       queryClient.removeQueries({ queryKey: ["auth"] });
 
