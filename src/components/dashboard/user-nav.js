@@ -14,8 +14,9 @@ import { useGetCurrentUserQuery } from "@/hooks/use-user";
 import { getCurrentUser } from "@/services/user.service";
 import Link from "next/link";
 import { Skeleton } from "../ui/skeleton";
+import { cn } from "@/lib/utils";
 
-export function UserNav() {
+export function UserNav({ isCollapsed = false }) {
   const { logOut } = useAuth();
 
   const { data: user, isLoading } = useGetCurrentUserQuery();
@@ -27,13 +28,7 @@ export function UserNav() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <div className="relative w-fit flex items-center gap-2 rounded-md border border-neutral-300 py-2 px-4">
-          <div className="flex flex-col gap-1 items-end">
-            <p className="text-sm font-medium leading-none">{user.name}</p>
-            <p className="text-xs leading-none text-muted-foreground">
-              {user.email}
-            </p>
-          </div>
+        <div className="relative w-max flex items-center gap-4 rounded-md border border-muted py-2 px-4">
           <Avatar className="h-10 w-10">
             <AvatarImage
               src="https://avatar.iran.liara.run/public"
@@ -41,14 +36,28 @@ export function UserNav() {
             />
             <AvatarFallback>{user.name[0]}</AvatarFallback>
           </Avatar>
+          <div
+            className={cn(
+              "flex flex-col gap-1 items-start",
+              isCollapsed && "hidden",
+            )}
+          >
+            <p className="text-sm font-medium leading-none">{user.name}</p>
+            <p className="text-xs leading-none text-muted-foreground">
+              {user.email}
+            </p>
+          </div>
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end" forceMount>
+      <DropdownMenuContent className="w-56" align="start" forceMount>
         <DropdownMenuGroup>
           <DropdownMenuItem>Profile</DropdownMenuItem>
-          <Link href="/settings">
-            <DropdownMenuItem>Settings</DropdownMenuItem>
-          </Link>
+          <DropdownMenuItem>
+            <Link href="/settings" className="h-full w-full">
+              Settings
+            </Link>
+          </DropdownMenuItem>
+
           <DropdownMenuItem>Billing</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />

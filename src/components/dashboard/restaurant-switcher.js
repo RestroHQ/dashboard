@@ -23,7 +23,7 @@ import { useGetCurrentUserQuery } from "@/hooks/use-user";
 import { setCurrentRestaurant } from "@/services/cookies.service";
 import { Skeleton } from "../ui/skeleton";
 
-export function RestaurantSwitcher() {
+export function RestaurantSwitcher({ isCollapsed = false }) {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -56,6 +56,10 @@ export function RestaurantSwitcher() {
     return <Skeleton className="w-full h-10" />;
   }
 
+  if (value === "settings") {
+    setValue("");
+  }
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -65,9 +69,11 @@ export function RestaurantSwitcher() {
           aria-expanded={open}
           className="w-full justify-between"
         >
-          {value
-            ? restaurants.find((restaurant) => restaurant.id === value).label
-            : "Select restaurant"}
+          {!isCollapsed &&
+            (value
+              ? restaurants?.find((restaurant) => restaurant.id === value)
+                  ?.label
+              : "Select restaurant")}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>

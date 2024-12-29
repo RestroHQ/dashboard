@@ -10,13 +10,21 @@ import { useEffect } from "react";
 
 const Home = () => {
   const router = useRouter();
+
+  const { data: currentRestaurant, isLoading: restaurantLoading } =
+    useGetCurrentRestaurantQuery();
   const { data: user, isLoading } = useGetCurrentUserQuery();
 
-  if (isLoading) {
+  if (isLoading || restaurantLoading) {
     return <Loader />;
   }
 
-  const restaurant = user.staffAt[1]?.restaurantId;
+  if (currentRestaurant) {
+    router.push(`/${currentRestaurant}`);
+    return <Loader />;
+  }
+
+  const restaurant = user.staffAt[0]?.restaurantId;
 
   if (restaurant) {
     router.push(`/${restaurant}`);
