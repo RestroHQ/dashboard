@@ -71,18 +71,18 @@ export default function Sidebar({ id, className }) {
       href: `/${id}/reviews`,
       color: "text-yellow-500",
     },
-    {
-      label: "Analytics",
-      icon: BarChart3,
-      href: `/${id}/analytics`,
-      color: "text-green-500",
-    },
-    {
-      label: "Marketing",
-      icon: Mail,
-      href: `/${id}/marketing`,
-      color: "text-purple-500",
-    },
+    // {
+    //   label: "Analytics",
+    //   icon: BarChart3,
+    //   href: `/${id}/analytics`,
+    //   color: "text-green-500",
+    // },
+    // {
+    //   label: "Marketing",
+    //   icon: Mail,
+    //   href: `/${id}/marketing`,
+    //   color: "text-purple-500",
+    // },
     {
       label: "Settings",
       icon: Settings,

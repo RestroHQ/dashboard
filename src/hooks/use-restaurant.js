@@ -1,4 +1,5 @@
 import { queryClient } from "@/providers/react-query";
+import { getCurrentRestaurant } from "@/services/cookies.service";
 import { getRestaurant, updateRestaurant } from "@/services/restaurant.service";
 import { createRestaurant } from "@/services/restaurant.service";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -7,7 +8,6 @@ export const useGetRestaurantQuery = (id) => {
   return useQuery({
     queryKey: ["restaurant", id],
     queryFn: () => getRestaurant(id),
-    enabled: !!id,
   });
 };
 
@@ -50,5 +50,12 @@ export const useUpdateRestaurantMutation = ({ onSuccess, onError }) => {
       console.error("Update mutation error:", error);
       onError?.(error);
     },
+  });
+};
+
+export const useGetCurrentRestaurantQuery = () => {
+  return useQuery({
+    queryKey: ["current-restaurant"],
+    queryFn: () => getCurrentRestaurant(),
   });
 };

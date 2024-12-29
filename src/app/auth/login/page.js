@@ -22,7 +22,6 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/use-auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -32,8 +31,6 @@ const formSchema = z.object({
 });
 
 const Page = () => {
-  const router = useRouter();
-
   const { login } = useAuth();
 
   const form = useForm({

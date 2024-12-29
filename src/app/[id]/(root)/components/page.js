@@ -1,15 +1,14 @@
 "use client";
 
+import Loader from "@/components/common/loader";
+import { UserNav } from "@/components/dashboard/user-nav";
 import { Card } from "@/components/ui/card";
+import { useGetRestaurantQuery } from "@/hooks/use-restaurant";
+import { useRouter } from "next/navigation";
 import Cards from "./cards";
 import { OrderStats } from "./order-stats";
 import { OrdersChart } from "./orders-chart";
 import { OrdersTable } from "./orders-table";
-import { UserNav } from "@/components/dashboard/user-nav";
-import { useGetRestaurantQuery } from "@/hooks/use-restaurant";
-import { useRouter } from "next/navigation";
-import { removeCurrentRestaurant } from "@/services/cookies.service";
-import Loader from "@/components/common/loader";
 
 const data = [
   { name: "Mon", sales: 4000 },
@@ -23,23 +22,17 @@ const data = [
 
 export default function DashboardPage({ id }) {
   const router = useRouter();
+
   const { data, isLoading } = useGetRestaurantQuery(id);
 
-  if (isLoading) {
+  if (!id || isLoading) {
     return <Loader />;
-  }
-
-  if (!data) {
-    removeCurrentRestaurant();
-
-    router.push("/");
-    return null;
   }
 
   return (
     <div className="flex-1 space-y-4 w-full">
       <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">{data?.name}</h2>
+        <h2 className="text-3xl font-bold tracking-tight">{data.name}</h2>
         <UserNav />
       </div>
 

@@ -19,25 +19,9 @@ import {
 } from "@/components/ui/popover";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-
-const restaurants = [
-  {
-    value: "the-continental",
-    label: "The Continental",
-  },
-  {
-    value: "pops-diner",
-    label: "Pop's Diner",
-  },
-  {
-    value: "the-krusty-krab",
-    label: "The Krusty Krab",
-  },
-  {
-    value: "vitos-pizza",
-    label: "Vito's Pizza",
-  },
-];
+import { useGetCurrentUserQuery } from "@/hooks/use-user";
+import { setCurrentRestaurant } from "@/services/cookies.service";
+import { Skeleton } from "../ui/skeleton";
 
 export function RestaurantSwitcher() {
   const router = useRouter();
@@ -46,21 +30,31 @@ export function RestaurantSwitcher() {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
 
+  const { data: user, isLoading } = useGetCurrentUserQuery();
+
+  const restaurants =
+    user?.staffAt?.map((item) => ({
+      id: item.restaurant.id,
+      label: item.restaurant.name,
+    })) || [];
+
   useEffect(() => {
     const restaurantId = pathname.split("/")[1];
 
-    if (restaurants.some((restaurant) => restaurant.value === restaurantId)) {
-      setValue(restaurantId);
-    }
-
-    console.log(restaurantId);
+    setValue(restaurantId);
   }, []);
 
   useEffect(() => {
+    setCurrentRestaurant(value);
+
     if (value) {
       router.push(`/${value}`);
     }
   }, [value]);
+
+  if (isLoading) {
+    return <Skeleton className="w-full h-10" />;
+  }
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -72,30 +66,32 @@ export function RestaurantSwitcher() {
           className="w-full justify-between"
         >
           {value
-            ? restaurants.find((restaurant) => restaurant.value === value).label
+            ? restaurants.find((restaurant) => restaurant.id === value).label
             : "Select restaurant"}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0" align="start">
         <Command>
-          <CommandInput placeholder="Search framework..." />
+          <CommandInput placeholder="Search restaurant..." />
           <CommandList>
-            <CommandEmpty>No framework found.</CommandEmpty>
+            <CommandEmpty>No restaurant found.</CommandEmpty>
             <CommandGroup>
               {restaurants.map((restaurant) => (
                 <CommandItem
-                  key={restaurant.value}
-                  value={restaurant.value}
+                  key={restaurant.id}
+                  value={restaurant.id}
                   onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue);
+                    if (currentValue !== value) {
+                      setValue(currentValue);
+                    }
                     setOpen(false);
                   }}
                 >
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === restaurant.value ? "opacity-100" : "opacity-0",
+                      value === restaurant.id ? "opacity-100" : "opacity-0",
                     )}
                   />
                   {restaurant.label}
