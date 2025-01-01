@@ -22,6 +22,7 @@ import { useState } from "react";
 import LogoWithText from "../common/logo-with-text";
 import { RestaurantSwitcher } from "./restaurant-switcher";
 import { UserNav } from "./user-nav";
+import { FileUser } from "lucide-react";
 
 export default function Sidebar({ id, className }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -60,7 +61,7 @@ export default function Sidebar({ id, className }) {
     },
     {
       label: "Customers",
-      icon: Users,
+      icon: FileUser,
       href: `/${id}/customers`,
       color: "text-blue-500",
     },
@@ -69,6 +70,12 @@ export default function Sidebar({ id, className }) {
       icon: Star,
       href: `/${id}/reviews`,
       color: "text-yellow-500",
+    },
+    {
+      label: "Team",
+      icon: Users,
+      href: `/${id}/team`,
+      color: "text-fuchsia-500",
     },
     // {
     //   label: "Analytics",
@@ -99,7 +106,7 @@ export default function Sidebar({ id, className }) {
   return (
     <div
       className={cn(
-        "relative flex flex-col border-r bg-card min-w-max",
+        "relative flex flex-col border-r bg-card min-w-max max-h-svh",
         isCollapsed && "min-w-fit",
         className,
       )}
@@ -110,7 +117,7 @@ export default function Sidebar({ id, className }) {
           isCollapsed && "justify-center",
         )}
       >
-        <Link href="/">
+        <Link href={`/${id}`}>
           <LogoWithText
             icon="h-6 w-6"
             text={cn("text-xl", isCollapsed && "hidden")}

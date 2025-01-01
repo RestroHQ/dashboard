@@ -23,7 +23,7 @@ export default function RootLayout({ children }) {
       <body
         className={cn(
           inter.className,
-          "antialiased bg-neutral-50 text-black dark:bg-neutral-900 dark:text-white",
+          "antialiased max-h-screen overflow-x-hidden bg-neutral-50 text-black dark:bg-neutral-900 dark:text-white",
         )}
       >
         <Providers>{children}</Providers>

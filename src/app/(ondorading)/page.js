@@ -1,12 +1,10 @@
 "use client";
 
 import Loader from "@/components/common/loader";
-import OnboardingWizard from "@/components/dashboard/onboading";
 import { useGetCurrentRestaurantQuery } from "@/hooks/use-restaurant";
 import { useGetCurrentUserQuery } from "@/hooks/use-user";
-import { getCurrentRestaurant } from "@/services/cookies.service";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import OnboardingWizard from "./components/wizard";
 
 const Home = () => {
   const router = useRouter();

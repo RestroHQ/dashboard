@@ -26,7 +26,10 @@ const formSchema = z.object({
 const ChangePassword = ({ user }) => {
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: {},
+    defaultValues: {
+      currentPassword: "",
+      newPassword: "",
+    },
   });
 
   const onSubmit = async (values) => {

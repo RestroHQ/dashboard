@@ -34,7 +34,7 @@ const UserSettings = ({ user }) => {
       email: user.email,
       username: user.username,
       phone: user.phone,
-      image: user.image || undefined,
+      image: "",
     },
   });
 

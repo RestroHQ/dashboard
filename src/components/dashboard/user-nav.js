@@ -28,7 +28,7 @@ export function UserNav({ isCollapsed = false }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <div className="relative w-max flex items-center gap-4 rounded-md border border-muted py-2 px-4">
+        <div className="relative w-max flex items-center gap-4 rounded-md border border-input py-2 px-4">
           <Avatar className="h-10 w-10">
             <AvatarImage
               src="https://avatar.iran.liara.run/public"
@@ -51,10 +51,9 @@ export function UserNav({ isCollapsed = false }) {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="start" forceMount>
         <DropdownMenuGroup>
-          <DropdownMenuItem>Profile</DropdownMenuItem>
           <DropdownMenuItem>
-            <Link href="/settings" className="h-full w-full">
-              Settings
+            <Link href="/preferences" className="h-full w-full">
+              Preferences
             </Link>
           </DropdownMenuItem>
 

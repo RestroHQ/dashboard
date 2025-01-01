@@ -27,12 +27,12 @@ export function ThemeToggle({ className }) {
             className,
           )}
         >
-          {theme === "dark" ? (
+          {theme === "light" ? (
             <div className="flex items-center gap-2">
               <Sun />
               <p className="-translate-y-px">Light</p>
             </div>
-          ) : theme === "light" ? (
+          ) : theme === "dark" ? (
             <div className="flex items-center gap-2">
               <Moon />
               <p className="-translate-y-px">Dark</p>

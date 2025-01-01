@@ -14,8 +14,8 @@ export default function ErrorPage() {
         Oops! Something went wrong.
       </h2>
       <p className="text-lg mt-2 text-gray-600">
-        We can't seem to find the page you're looking for. Try going back to the
-        homepage.
+        We can&apo;t seem to find the page you&apo;re looking for. Try going
+        back to the homepage.
       </p>
       <Button onClick={() => router.push("/")} className="mt-4">
         Go back to home

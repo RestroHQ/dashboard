@@ -1,7 +1,6 @@
 "use client";
 
 import Loader from "@/components/common/loader";
-import { UserNav } from "@/components/dashboard/user-nav";
 import { Card } from "@/components/ui/card";
 import { useGetRestaurantQuery } from "@/hooks/use-restaurant";
 import { useRouter } from "next/navigation";
@@ -30,11 +29,8 @@ export default function Page({ id }) {
   }
 
   return (
-    <div className="flex-1 space-y-4 w-full">
-      <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">{data.name}</h2>
-        <UserNav />
-      </div>
+    <div className="flex-1 space-y-4 w-full p-4">
+      <h2 className="text-3xl font-bold tracking-tight mb-8">{data.name}</h2>
 
       <div className="grid grid-cols-4 gap-4">
         <div className="col-span-3 flex flex-col gap-4">

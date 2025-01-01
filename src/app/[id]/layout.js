@@ -1,11 +1,13 @@
 import Sidebar from "@/components/dashboard/sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 
-const Layout = async ({ children }) => {
+const Layout = async ({ params, children }) => {
+  const id = (await params).id;
+
   return (
     <SidebarProvider>
-      <Sidebar />
-      <main className="m-4 w-full">{children}</main>
+      <Sidebar id={id} />
+      <main className="w-full">{children}</main>
     </SidebarProvider>
   );
 };
