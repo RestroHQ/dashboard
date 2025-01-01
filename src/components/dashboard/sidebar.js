@@ -4,14 +4,12 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import {
-  BarChart3,
   CalendarDays,
   ChevronLeft,
   ChevronRight,
   ClipboardList,
   HelpCircle,
   LayoutDashboard,
-  Mail,
   Menu,
   Settings,
   Star,
@@ -23,6 +21,8 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import LogoWithText from "../common/logo-with-text";
 import { RestaurantSwitcher } from "./restaurant-switcher";
+import { UserNav } from "./user-nav";
+import { FileUser } from "lucide-react";
 
 export default function Sidebar({ id, className }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -42,9 +42,9 @@ export default function Sidebar({ id, className }) {
       color: "text-violet-500",
     },
     {
-      label: "Menu Management",
+      label: "Menus",
       icon: Menu,
-      href: `/${id}/menu`,
+      href: `/${id}/menus`,
       color: "text-pink-500",
     },
     {
@@ -61,7 +61,7 @@ export default function Sidebar({ id, className }) {
     },
     {
       label: "Customers",
-      icon: Users,
+      icon: FileUser,
       href: `/${id}/customers`,
       color: "text-blue-500",
     },
@@ -70,6 +70,12 @@ export default function Sidebar({ id, className }) {
       icon: Star,
       href: `/${id}/reviews`,
       color: "text-yellow-500",
+    },
+    {
+      label: "Team",
+      icon: Users,
+      href: `/${id}/team`,
+      color: "text-fuchsia-500",
     },
     // {
     //   label: "Analytics",
@@ -100,7 +106,7 @@ export default function Sidebar({ id, className }) {
   return (
     <div
       className={cn(
-        "relative flex flex-col border-r bg-card min-w-64",
+        "relative flex flex-col border-r bg-card min-w-max max-h-svh",
         isCollapsed && "min-w-fit",
         className,
       )}
@@ -111,7 +117,7 @@ export default function Sidebar({ id, className }) {
           isCollapsed && "justify-center",
         )}
       >
-        <Link href="/">
+        <Link href={`/${id}`}>
           <LogoWithText
             icon="h-6 w-6"
             text={cn("text-xl", isCollapsed && "hidden")}
@@ -120,13 +126,8 @@ export default function Sidebar({ id, className }) {
         </Link>
       </div>
 
-      <div
-        className={cn(
-          "border-b px-4 flex items-center justify-start py-4",
-          isCollapsed && "justify-center",
-        )}
-      >
-        <RestaurantSwitcher />
+      <div className={cn("border-b px-4 flex items-center justify-start py-4")}>
+        <RestaurantSwitcher isCollapsed={isCollapsed} />
       </div>
 
       <ScrollArea className="flex-1 p-4">
@@ -140,7 +141,7 @@ export default function Sidebar({ id, className }) {
                 pathname === route.href
                   ? "bg-accent text-accent-foreground"
                   : "text-muted-foreground",
-                isCollapsed && "gap-0",
+                isCollapsed && "gap-0 justify-center",
               )}
             >
               <route.icon className={cn("h-5 w-5", route.color)} />
@@ -151,18 +152,20 @@ export default function Sidebar({ id, className }) {
       </ScrollArea>
       <div
         className={cn(
-          "border-t p-4 items-center flex justify-between",
-          isCollapsed && "justify-center",
+          "border-t p-4 flex flex-col gap-4",
+          isCollapsed && "items-center",
         )}
       >
-        {/* {!isCollapsed && <ThemeToggle />} */}
         <Button
           variant="outline"
-          size="icon"
+          className="w-full"
           onClick={() => setIsCollapsed(!isCollapsed)}
         >
           {isCollapsed ? <ChevronRight /> : <ChevronLeft />}
+          {!isCollapsed && <span>Toggle Sidebar</span>}
         </Button>
+
+        <UserNav isCollapsed={isCollapsed} />
       </div>
     </div>
   );

@@ -90,7 +90,7 @@ export default function Page() {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex max-h-svh overflow-y-hidden">
       <div className="flex-1 p-6">
         <Tabs defaultValue="all" className="h-full">
           <TabsList className="mb-4">
@@ -132,11 +132,11 @@ export default function Page() {
           </TabsContent>
         </Tabs>
       </div>
-      <div className="w-[400px] border-l">
+      <div className="w-[400px] border-l h-svh flex flex-col">
         <div className="p-4 border-b">
           <h2 className="text-2xl font-bold">Current Order</h2>
         </div>
-        <ScrollArea className="h-[calc(100vh-13rem)]">
+        <ScrollArea className="h-full">
           <div className="p-4 space-y-4">
             {orderItems.map((item) => (
               <Card key={item.menuItem.id}>

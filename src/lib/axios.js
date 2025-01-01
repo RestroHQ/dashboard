@@ -3,20 +3,21 @@ import axios from "axios";
 import { getCookie } from "cookies-next";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+const TOKEN = getCookie(AUTH_TOKEN_KEY);
 
-export const axiosClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BACKEND_URL + "/api/v1",
+const options = {
+  baseURL: BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
-});
+};
 
-const TOKEN = getCookie(AUTH_TOKEN_KEY);
+export const axiosClient = axios.create(options);
 
 export const axiosClientWithAuth = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BACKEND_URL + "/api/v1",
+  ...options,
   headers: {
-    Authorization: `Bearer ${TOKEN}`,
-    "Content-Type": "application/json",
+    ...options.headers,
+    Authorization: `Bearer ${getCookie(AUTH_TOKEN_KEY)}`,
   },
 });

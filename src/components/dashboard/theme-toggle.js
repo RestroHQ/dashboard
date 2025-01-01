@@ -10,20 +10,45 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Computer } from "lucide-react";
+import { ChevronsUpDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-export function ThemeToggle() {
-  const { setTheme } = useTheme();
+export function ThemeToggle({ className }) {
+  const { theme, setTheme } = useTheme();
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon">
-          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+        <Button
+          variant="outline"
+          className={cn(
+            "flex items-center justify-between gap-8 w-40",
+            className,
+          )}
+        >
+          {theme === "light" ? (
+            <div className="flex items-center gap-2">
+              <Sun />
+              <p className="-translate-y-px">Light</p>
+            </div>
+          ) : theme === "dark" ? (
+            <div className="flex items-center gap-2">
+              <Moon />
+              <p className="-translate-y-px">Dark</p>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <Computer />
+              <p className="-translate-y-px">System</p>
+            </div>
+          )}
           <span className="sr-only">Toggle theme</span>
+
+          <ChevronsUpDown />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="start">
         <DropdownMenuItem onClick={() => setTheme("light")}>
           Light
         </DropdownMenuItem>
