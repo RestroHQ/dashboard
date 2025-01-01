@@ -6,7 +6,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 const TOKEN = getCookie(AUTH_TOKEN_KEY);
 
 const options = {
-  baseURL: BASE_URL,
+  baseURL: BASE_URL + "/api/v1",
   headers: {
     "Content-Type": "application/json",
   },
