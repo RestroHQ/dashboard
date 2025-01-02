@@ -1,6 +1,5 @@
 "use client";
 
-import LogoWithText from "@/components/common/logo-with-text";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { useFileUpload } from "@/hooks/use-files";
@@ -17,12 +16,12 @@ import { Check } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
+import { useRouter } from "next/navigation";
 import { Additional } from "./additional";
 import { BasicInfo } from "./basic";
 import { ContactInfo } from "./contact";
 import { Hours } from "./hours";
 import { defaultValues, restaurantSchema } from "./schema";
-import { useRouter } from "next/navigation";
 
 const OnboardingWizard = ({ className }) => {
   const router = useRouter();
@@ -162,79 +161,68 @@ const OnboardingWizard = ({ className }) => {
   ];
 
   return (
-    <section
-      className={cn(
-        "min-h-screen flex flex-col justify-center items-center py-8 px-4",
-        className,
-      )}
-    >
-      <section className="w-full max-w-4xl border p-8 rounded-lg">
-        <section className="flex items-start gap-8">
-          <div className="min-w-60">
-            <LogoWithText icon="w-6 h-6" text="text-xl" className="mb-4" />
+    <section className={cn("w-full h-full", className)}>
+      <section className="flex items-start gap-8">
+        <div className="min-w-60">
+          <h1 className="text-2xl font-bold mb-8">Create Your Restaurant</h1>
 
-            <hr className="border-t border-gray-200 my-4" />
-
-            <h1 className="text-2xl font-bold mb-8">Create Your Restaurant</h1>
-
-            <div className="relative flex flex-col gap-4 mx-auto mb-4">
-              {tabs.map((tab, index) => (
-                <div
-                  key={index}
-                  className="flex items-center text-sm gap-2 cursor-pointer"
-                  onClick={() => setStep(index)}
-                >
-                  <Check
-                    className={cn(
-                      "w-4 h-4",
-                      step >= index ? "text-green-500" : "text-gray-300",
-                    )}
-                  />
-                  <span className="text-gray-600">{tab.name}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <Form {...form}>
-            <div className="flex flex-col w-full">
-              <form
-                onSubmit={form.handleSubmit(onSubmit, onError)}
-                className="space-y-6 min-h-96"
+          <div className="relative flex flex-col gap-4 mx-auto mb-4">
+            {tabs.map((tab, index) => (
+              <div
+                key={index}
+                className="flex items-center text-sm gap-2 cursor-pointer"
+                onClick={() => setStep(index)}
               >
-                {tabs[step].component}
-              </form>
+                <Check
+                  className={cn(
+                    "w-4 h-4",
+                    step >= index ? "text-green-500" : "text-gray-300",
+                  )}
+                />
+                <span className="text-gray-600">{tab.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
 
-              <div className="grid grid-cols-2 gap-4 mt-8">
+        <Form {...form}>
+          <div className="flex flex-col w-full">
+            <form
+              onSubmit={form.handleSubmit(onSubmit, onError)}
+              className="space-y-6 min-h-96"
+            >
+              {tabs[step].component}
+            </form>
+
+            <div className="grid grid-cols-2 gap-4 mt-8">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setStep(step - 1)}
+                disabled={step === 0}
+              >
+                Back
+              </Button>
+
+              {step !== tabs.length - 1 ? (
                 <Button
                   type="button"
-                  variant="outline"
-                  onClick={() => setStep(step - 1)}
-                  disabled={step === 0}
+                  variant="secondary"
+                  onClick={() => setStep(step + 1)}
                 >
-                  Back
+                  Continue
                 </Button>
-
-                {step !== tabs.length - 1 ? (
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    onClick={() => setStep(step + 1)}
-                  >
-                    Continue
-                  </Button>
-                ) : (
-                  <Button
-                    type="submit"
-                    onClick={form.handleSubmit(onSubmit, onError)}
-                  >
-                    Create Restaurant
-                  </Button>
-                )}
-              </div>
+              ) : (
+                <Button
+                  type="submit"
+                  onClick={form.handleSubmit(onSubmit, onError)}
+                >
+                  Create Restaurant
+                </Button>
+              )}
             </div>
-          </Form>
-        </section>
+          </div>
+        </Form>
       </section>
     </section>
   );

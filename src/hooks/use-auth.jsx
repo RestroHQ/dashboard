@@ -4,6 +4,7 @@ import { queryClient } from "@/providers/react-query";
 import {
   decodeToken,
   getTokenCookie,
+  removeCurrentRestaurant,
   removeTokenCookie,
   setCurrentRestaurant,
   setTokenCookie,
@@ -87,7 +88,11 @@ export function useAuth() {
         const restaurantId = data.user?.staffAt[0].restaurantId;
         setCurrentRestaurant(restaurantId);
 
-        router.push(`/${restaurantId}`);
+        if (window) {
+          window.location.href = `/${restaurantId}`;
+        } else {
+          router.push(`/${restaurantId}`);
+        }
       } else {
         router.push("/");
       }
@@ -105,6 +110,7 @@ export function useAuth() {
   const logOut = useMutation({
     mutationFn: async () => {
       removeTokenCookie();
+      removeCurrentRestaurant();
 
       queryClient.removeQueries({ queryKey: ["auth"] });
 
