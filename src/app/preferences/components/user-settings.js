@@ -30,10 +30,10 @@ const UserSettings = ({ user }) => {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: user.name,
-      email: user.email,
-      username: user.username,
-      phone: user.phone,
+      name: user.name || "",
+      email: user.email || "",
+      username: user.username || "",
+      phone: user.phone || "",
       image: "",
     },
   });
