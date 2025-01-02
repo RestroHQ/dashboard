@@ -22,16 +22,16 @@ const Home = () => {
     return <Loader />;
   }
 
-  const restaurant = user.staffAt[0]?.restaurantId;
+  const restaurant = user?.staffAt[0]?.restaurantId;
 
-  if (restaurant) {
+  if (user && restaurant) {
     router.push(`/${restaurant}`);
     return <Loader />;
   }
 
   return (
-    <main>
-      <OnboardingWizard />
+    <main className="h-screen flex items-center justify-center">
+      <OnboardingWizard className="max-w-4xl border p-8 rounded-lg h-fit" />
     </main>
   );
 };

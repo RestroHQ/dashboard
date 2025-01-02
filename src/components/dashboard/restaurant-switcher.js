@@ -22,6 +22,8 @@ import { useEffect, useState } from "react";
 import { useGetCurrentUserQuery } from "@/hooks/use-user";
 import { setCurrentRestaurant } from "@/services/cookies.service";
 import { Skeleton } from "../ui/skeleton";
+import AddRestaurantDialog from "./add-restaurant-dialog";
+import { PlusCircle } from "lucide-react";
 
 export function RestaurantSwitcher({ isCollapsed = false }) {
   const router = useRouter();
@@ -67,14 +69,22 @@ export function RestaurantSwitcher({ isCollapsed = false }) {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between"
+          className={cn(
+            "w-full justify-between",
+            isCollapsed && "justify-center",
+          )}
         >
           {!isCollapsed &&
             (value
               ? restaurants?.find((restaurant) => restaurant.id === value)
                   ?.label
               : "Select restaurant")}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <ChevronsUpDown
+            className={cn(
+              "h-4 w-4 shrink-0 opacity-50",
+              !isCollapsed && "ml-2",
+            )}
+          />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0" align="start">

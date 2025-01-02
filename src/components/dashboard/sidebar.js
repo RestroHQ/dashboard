@@ -23,6 +23,7 @@ import LogoWithText from "../common/logo-with-text";
 import { RestaurantSwitcher } from "./restaurant-switcher";
 import { UserNav } from "./user-nav";
 import { FileUser } from "lucide-react";
+import AddRestaurantDialog from "./add-restaurant-dialog";
 
 export default function Sidebar({ id, className }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -126,8 +127,14 @@ export default function Sidebar({ id, className }) {
         </Link>
       </div>
 
-      <div className={cn("border-b px-4 flex items-center justify-start py-4")}>
+      <div
+        className={cn(
+          "border-b px-4 flex flex-col gap-2 items-center justify-start py-4",
+        )}
+      >
         <RestaurantSwitcher isCollapsed={isCollapsed} />
+
+        <AddRestaurantDialog isCollapsed={isCollapsed} />
       </div>
 
       <ScrollArea className="flex-1 p-4">
