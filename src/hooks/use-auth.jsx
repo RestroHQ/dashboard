@@ -94,7 +94,11 @@ export function useAuth() {
           router.push(`/${restaurantId}`);
         }
       } else {
-        router.push("/");
+        if (window) {
+          window.location.href = "/";
+        } else {
+          router.push("/");
+        }
       }
     },
     onError: (error) => {

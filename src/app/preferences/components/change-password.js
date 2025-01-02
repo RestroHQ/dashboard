@@ -21,6 +21,7 @@ import { z } from "zod";
 const formSchema = z.object({
   currentPassword: z.string().min(8).max(50),
   newPassword: z.string().min(8).max(50),
+  confirmPassword: z.string().min(8).max(50),
 });
 
 const ChangePassword = ({ user }) => {
@@ -29,6 +30,7 @@ const ChangePassword = ({ user }) => {
     defaultValues: {
       currentPassword: "",
       newPassword: "",
+      confirmPassword: "",
     },
   });
 
@@ -49,7 +51,29 @@ const ChangePassword = ({ user }) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Password <span className="text-red-500">*</span>
+                    Current Password <span className="text-red-500">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      placeholder="••••••••••••••"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-8">
+            <FormField
+              control={form.control}
+              name="newPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    New Password <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -65,7 +89,7 @@ const ChangePassword = ({ user }) => {
 
             <FormField
               control={form.control}
-              name="newPassword"
+              name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
