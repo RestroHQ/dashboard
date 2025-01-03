@@ -16,7 +16,7 @@ import Link from "next/link";
 import { Skeleton } from "../ui/skeleton";
 import { cn } from "@/lib/utils";
 
-export function UserNav({ isCollapsed = false }) {
+export const UserNav = ({ isCollapsed = false, align = "start" }) => {
   const { logOut } = useAuth();
 
   const { data: user, isLoading } = useGetCurrentUserQuery();
@@ -49,7 +49,7 @@ export function UserNav({ isCollapsed = false }) {
           </div>
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="start" forceMount>
+      <DropdownMenuContent className="w-56" align={align} forceMount>
         <DropdownMenuGroup>
           <DropdownMenuItem>
             <Link href="/preferences" className="h-full w-full">
@@ -69,4 +69,4 @@ export function UserNav({ isCollapsed = false }) {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-}
+};
