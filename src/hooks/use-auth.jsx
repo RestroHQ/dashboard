@@ -88,13 +88,13 @@ export function useAuth() {
         const restaurantId = data.user?.staffAt[0].restaurantId;
         setCurrentRestaurant(restaurantId);
 
-        if (window) {
+        if (typeof window !== "undefined") {
           window.location.href = `/${restaurantId}`;
         } else {
           router.push(`/${restaurantId}`);
         }
       } else {
-        if (window) {
+        if (typeof window !== "undefined") {
           window.location.href = "/";
         } else {
           router.push("/");
