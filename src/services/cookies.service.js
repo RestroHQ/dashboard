@@ -40,7 +40,7 @@ export const setCurrentRestaurant = (restaurantId) => {
 export const getCurrentRestaurant = () => {
   const restaurantId = getCookie("restaurantId");
 
-  return restaurantId ? restaurantId : null;
+  return restaurantId ? restaurantId : "";
 };
 
 export const removeCurrentRestaurant = () => {

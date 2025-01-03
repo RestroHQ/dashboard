@@ -6,6 +6,7 @@ import { useGetCurrentUserQuery } from "@/hooks/use-user";
 import { useRouter } from "next/navigation";
 import OnboardingWizard from "./components/wizard";
 import LogoWithText from "@/components/common/logo-with-text";
+import { UserNav } from "@/components/dashboard/user-nav";
 
 const Home = () => {
   const router = useRouter();
@@ -31,9 +32,13 @@ const Home = () => {
   }
 
   return (
-    <main className="h-screen flex flex-col items-center justify-center">
+    <main className="relative h-screen flex flex-col items-center justify-center">
       <LogoWithText icon="w-12" text="text-2xl" className="mb-4 gap-2" />
       <OnboardingWizard className="max-w-4xl border p-8 rounded-lg h-fit" />
+
+      <div className="absolute top-4 right-4">
+        <UserNav align="end" />
+      </div>
     </main>
   );
 };
