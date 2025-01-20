@@ -36,6 +36,9 @@ export function ViewMenu() {
             <p className="text-sm text-gray-500">
               <strong>Name:</strong> Breakfast
             </p>
+            <p className="text-sm text-gray-500">
+              <strong>Description:</strong> A delicious breakfast menu.
+            </p>
           </div>
           <DrawerFooter>
             <Button>Submit</Button>

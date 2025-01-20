@@ -1,7 +1,9 @@
 "use client";
 
 import PageHeader from "@/components/dashboard/page-header";
+import { DataTable } from "@/components/ui/data-table";
 import { useRouter } from "next/navigation";
+import { columns } from "./components/columns";
 
 const Page = ({ restaurantId }) => {
   const router = useRouter();
@@ -14,6 +16,8 @@ const Page = ({ restaurantId }) => {
           subtitle="Manage your restaurant's reservations"
         />
       </div>
+
+      <DataTable columns={columns} data={{}} />
     </main>
   );
 };
