@@ -1,7 +1,10 @@
 import { queryClient } from "@/providers/react-query";
 import { getCurrentRestaurant } from "@/services/cookies.service";
-import { getRestaurant, updateRestaurant } from "@/services/restaurant.service";
-import { createRestaurant } from "@/services/restaurant.service";
+import {
+  createRestaurant,
+  getRestaurant,
+  updateRestaurant,
+} from "@/services/restaurant.service";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useGetRestaurantQuery = (id) => {
@@ -57,5 +60,17 @@ export const useGetCurrentRestaurantQuery = () => {
   return useQuery({
     queryKey: ["current-restaurant"],
     queryFn: () => getCurrentRestaurant(),
+  });
+};
+
+export const useGetRestaurantsByIdsMutation = () => {
+  return useMutation({
+    mutationKey: ["restaurants-by-ids"],
+    mutationFn: async (ids) => {
+      if (!Array.isArray(ids) || ids.length === 0) {
+        throw new Error("Invalid restaurant IDs");
+      }
+      return Promise.all(ids.map((id) => getRestaurant(id)));
+    },
   });
 };
