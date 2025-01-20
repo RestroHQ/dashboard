@@ -84,21 +84,10 @@ export function useAuth() {
         description: "Successfully logged in",
       });
 
-      if (data.user?.staffAt?.length) {
-        const restaurantId = data.user?.staffAt[0].restaurantId;
-        setCurrentRestaurant(restaurantId);
-
-        if (typeof window !== "undefined") {
-          window.location.href = `/${restaurantId}`;
-        } else {
-          router.push(`/${restaurantId}`);
-        }
+      if (typeof window !== "undefined") {
+        window.location.href = "/";
       } else {
-        if (typeof window !== "undefined") {
-          window.location.href = "/";
-        } else {
-          router.push("/");
-        }
+        router.push("/");
       }
     },
     onError: (error) => {

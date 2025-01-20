@@ -2,7 +2,6 @@
 
 import { Check, ChevronsUpDown } from "lucide-react";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -17,13 +16,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useGetCurrentUserQuery } from "@/hooks/use-user";
+import { cn } from "@/lib/utils";
+import { setCurrentRestaurant } from "@/services/cookies.service";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useGetCurrentUserQuery } from "@/hooks/use-user";
-import { setCurrentRestaurant } from "@/services/cookies.service";
 import { Skeleton } from "../ui/skeleton";
+import { useGetRestaurantsByIdsMutation } from "@/hooks/use-restaurant";
 import AddRestaurantDialog from "./add-restaurant-dialog";
-import { PlusCircle } from "lucide-react";
 
 export function RestaurantSwitcher({ isCollapsed = false }) {
   const router = useRouter();
@@ -34,11 +34,20 @@ export function RestaurantSwitcher({ isCollapsed = false }) {
 
   const { data: user, isLoading } = useGetCurrentUserQuery();
 
-  const restaurants =
-    user?.staffAt?.map((item) => ({
-      id: item.restaurant.id,
-      label: item.restaurant.name,
-    })) || [];
+  const {
+    mutate: getRestaurants,
+    data: restaurants,
+    isLoading: restaurantsLoading,
+  } = useGetRestaurantsByIdsMutation();
+
+  useEffect(() => {
+    if (user && user.staffAt) {
+      const restaurantIds = user.staffAt.map(
+        (restaurant) => restaurant.restaurantId,
+      );
+      getRestaurants(restaurantIds);
+    }
+  }, [user]);
 
   useEffect(() => {
     const restaurantId = pathname.split("/")[1];
@@ -54,7 +63,7 @@ export function RestaurantSwitcher({ isCollapsed = false }) {
     }
   }, [value]);
 
-  if (isLoading) {
+  if (isLoading || restaurantsLoading || !restaurants) {
     return <Skeleton className="w-full h-10" />;
   }
 
@@ -76,8 +85,7 @@ export function RestaurantSwitcher({ isCollapsed = false }) {
         >
           {!isCollapsed &&
             (value
-              ? restaurants?.find((restaurant) => restaurant.id === value)
-                  ?.label
+              ? restaurants?.find((restaurant) => restaurant.id === value)?.name
               : "Select restaurant")}
           <ChevronsUpDown
             className={cn(
@@ -110,7 +118,7 @@ export function RestaurantSwitcher({ isCollapsed = false }) {
                       value === restaurant.id ? "opacity-100" : "opacity-0",
                     )}
                   />
-                  {restaurant.label}
+                  {restaurant.name}
                 </CommandItem>
               ))}
             </CommandGroup>

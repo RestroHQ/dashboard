@@ -1,7 +1,7 @@
 import Page from "./page";
 
 export const metadata = {
-  title: "Preferences",
+  title: "Settings",
 };
 
 const Layout = async ({ params }) => {

@@ -24,8 +24,9 @@ import { RestaurantSwitcher } from "./restaurant-switcher";
 import { UserNav } from "./user-nav";
 import { FileUser } from "lucide-react";
 import AddRestaurantDialog from "./add-restaurant-dialog";
+import { BarChart3 } from "lucide-react";
 
-export default function Sidebar({ id, className }) {
+export default function Sidebar({ restaurantId, className }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const pathname = usePathname();
 
@@ -33,73 +34,73 @@ export default function Sidebar({ id, className }) {
     {
       label: "Dashboard",
       icon: LayoutDashboard,
-      href: `/${id}`,
+      href: `/${restaurantId}`,
       color: "text-sky-500",
     },
     {
       label: "POS",
       icon: Store,
-      href: `/${id}/pos`,
+      href: `/${restaurantId}/pos`,
       color: "text-violet-500",
     },
     {
       label: "Menus",
       icon: Menu,
-      href: `/${id}/menus`,
+      href: `/${restaurantId}/menus`,
       color: "text-pink-500",
     },
     {
       label: "Orders",
       icon: ClipboardList,
-      href: `/${id}/orders`,
+      href: `/${restaurantId}/orders`,
       color: "text-orange-500",
     },
     {
       label: "Reservations",
       icon: CalendarDays,
-      href: `/${id}/reservations`,
+      href: `/${restaurantId}/reservations`,
       color: "text-emerald-500",
     },
     {
       label: "Customers",
       icon: FileUser,
-      href: `/${id}/customers`,
+      href: `/${restaurantId}/customers`,
       color: "text-blue-500",
     },
     {
       label: "Reviews",
       icon: Star,
-      href: `/${id}/reviews`,
+      href: `/${restaurantId}/reviews`,
       color: "text-yellow-500",
     },
     {
       label: "Team",
       icon: Users,
-      href: `/${id}/team`,
+      href: `/${restaurantId}/team`,
       color: "text-fuchsia-500",
     },
-    // {
-    //   label: "Analytics",
-    //   icon: BarChart3,
-    //   href: `/${id}/analytics`,
-    //   color: "text-green-500",
-    // },
+    {
+      label: "Analytics",
+      icon: BarChart3,
+      href: `/${restaurantId}/analytics`,
+      color: "text-green-500",
+    },
     // {
     //   label: "Marketing",
     //   icon: Mail,
-    //   href: `/${id}/marketing`,
+    //   href: `/${restaurantId}/marketing`,
     //   color: "text-purple-500",
     // },
     {
       label: "Settings",
       icon: Settings,
-      href: `/${id}/settings`,
+      href: `/${restaurantId}/settings`,
       color: "text-gray-500",
     },
     {
       label: "Help & Support",
       icon: HelpCircle,
-      href: `/${id}/support`,
+      href: `/${restaurantId}/support`,
       color: "text-indigo-500",
     },
   ];
@@ -114,11 +115,11 @@ export default function Sidebar({ id, className }) {
     >
       <div
         className={cn(
-          "border-b px-8 flex items-center justify-start",
+          "border-b px-4 flex items-center justify-start",
           isCollapsed && "justify-center",
         )}
       >
-        <Link href={`/${id}`}>
+        <Link href={`/${restaurantId}`}>
           <LogoWithText
             icon="h-6 w-6"
             text={cn("text-xl", isCollapsed && "hidden")}

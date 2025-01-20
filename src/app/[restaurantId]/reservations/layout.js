@@ -1,7 +1,7 @@
 import Page from "./page";
 
 export const metadata = {
-  title: "Preferences",
+  title: "Reservations",
 };
 
 const Layout = async ({ params }) => {
