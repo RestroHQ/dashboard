@@ -25,6 +25,7 @@ import { UserNav } from "./user-nav";
 import { FileUser } from "lucide-react";
 import AddRestaurantDialog from "./add-restaurant-dialog";
 import { BarChart3 } from "lucide-react";
+import { CreditCard } from "lucide-react";
 
 export default function Sidebar({ restaurantId, className }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -85,12 +86,12 @@ export default function Sidebar({ restaurantId, className }) {
       href: `/${restaurantId}/analytics`,
       color: "text-green-500",
     },
-    // {
-    //   label: "Marketing",
-    //   icon: Mail,
-    //   href: `/${restaurantId}/marketing`,
-    //   color: "text-purple-500",
-    // },
+    {
+      label: "Billing",
+      icon: CreditCard,
+      href: `/${restaurantId}/billing`,
+      color: "text-purple-500",
+    },
     {
       label: "Settings",
       icon: Settings,

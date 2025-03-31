@@ -22,14 +22,22 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const formSchema = z.object({
-  name: z.string().min(2).max(50),
+  name: z
+    .string()
+    .min(2, "Name must be at least 2 characters")
+    .max(50, "Name must be less than 50 characters"),
+  dateTime: z.date({
+    required_error: "Please select a date and time",
+    invalid_type_error: "That's not a valid date and time",
+  }),
 });
 
-export function AddMenuDialog({ restaurantId, data }) {
+export function AddMenuDialog({ data }) {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: data || {
       name: "",
+      dateTime: new Date(),
     },
   });
 

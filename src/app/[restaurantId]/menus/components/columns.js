@@ -22,17 +22,32 @@ export const columns = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Active" />
     ),
+    cell: ({ row }) => (
+      <span className="whitespace-nowrap">
+        {row.original.isActive ? "Yes" : "No"}
+      </span>
+    ),
   },
   {
     accessorKey: "createdAt",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Created At" />
     ),
+    cell: ({ row }) => (
+      <span className="whitespace-nowrap">
+        {new Date(row.original.createdAt).toLocaleString()}
+      </span>
+    ),
   },
   {
     accessorKey: "updatedAt",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Updated At" />
+    ),
+    cell: ({ row }) => (
+      <span className="whitespace-nowrap">
+        {new Date(row.original.updatedAt).toLocaleString()}
+      </span>
     ),
   },
   {
