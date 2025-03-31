@@ -75,7 +75,7 @@ const Home = () => {
       <h2 className="text-lg font-semibold mt-8">Select a restaurant</h2>
 
       <div className="grid grid-cols-5 gap-4 mt-4">
-        {restaurants.length > 0 &&
+        {restaurants?.length > 0 &&
           restaurants.map((restaurant) => {
             const role = restaurant.staff.find(
               (s) => s.userId === user.id,
@@ -83,7 +83,7 @@ const Home = () => {
 
             return (
               <div
-                className="w-full py-2 px-4 border text-sm rounded-lg mb-2 flex items-center gap-4"
+                className="w-full py-2 px-4 border text-sm rounded-lg mb-2 flex items-center gap-4 cursor-pointer"
                 key={restaurant.id}
                 onClick={() => {
                   router.push(`/${restaurant.id}`);

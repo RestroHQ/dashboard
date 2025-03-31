@@ -11,9 +11,12 @@ export const getMenus = async (restaurantId) => {
   }
 };
 
-export const getMenu = async (id) => {
+export const getMenu = async (restaurantId, menuId) => {
   try {
-    const response = await axiosClientWithAuth.get(`/menus/${id}`);
+    const response = await axiosClientWithAuth.get(
+      `/restaurants/${restaurantId}/menus/${menuId}`,
+    );
+
     return response.data;
   } catch (error) {
     console.log("Error fetching menu:", error);
