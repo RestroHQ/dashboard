@@ -27,6 +27,20 @@ export const BasicInfo = ({ form }) => {
 
       <FormField
         control={form.control}
+        name="slug"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Slug *</FormLabel>
+            <FormControl>
+              <Input placeholder="the-grand-restaurant" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={form.control}
         name="description"
         render={({ field }) => (
           <FormItem>

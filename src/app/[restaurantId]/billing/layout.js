@@ -4,10 +4,8 @@ export const metadata = {
   title: "Billing",
 };
 
-const Layout = async ({ params }) => {
-  const restaurantId = (await params).restaurantId;
-
-  return <Page restaurantId={restaurantId} />;
+const Layout = async ({ children }) => {
+  return children;
 };
 
 export default Layout;

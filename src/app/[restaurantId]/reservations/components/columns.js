@@ -5,10 +5,13 @@ import { DataTableColumnHeader } from "@/components/ui/reusable/data-table-colum
 
 export const columns = [
   {
-    accessorKey: "id",
+    accessorKey: "table",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="ID" />
+      <DataTableColumnHeader column={column} title="Table" />
     ),
+    cell: ({ row }) => {
+      return <div>{row.original.table?.name}</div>;
+    },
   },
   {
     accessorKey: "customer",
@@ -16,29 +19,33 @@ export const columns = [
       <DataTableColumnHeader column={column} title="Customer" />
     ),
     cell: ({ row }) => {
+      return <div>{row.original.customer?.name}</div>;
+    },
+  },
+  {
+    accessorKey: "date",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Date" />
+    ),
+    cell: ({ row }) => {
       return (
         <div>
-          {row.customer?.firstName} {row.customer?.lastName}
+          {new Date(row.original.timeSlot?.startTime).toLocaleDateString()}
         </div>
       );
     },
   },
   {
-    accessorKey: "table",
+    accessorKey: "time",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Table" />
+      <DataTableColumnHeader column={column} title="Time" />
     ),
     cell: ({ row }) => {
-      return <div>{row.table?.name}</div>;
-    },
-  },
-  {
-    accessorKey: "timeSlot",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Time Slot" />
-    ),
-    cell: ({ row }) => {
-      return <div>{row.timeSlot?.name}</div>;
+      return (
+        <div>
+          {new Date(row.original.timeSlot?.startTime).toLocaleTimeString()}
+        </div>
+      );
     },
   },
   {

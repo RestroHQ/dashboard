@@ -12,20 +12,21 @@ export const columns = [
     ),
   },
   {
-    accessorKey: "description",
+    accessorKey: "email",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Description" />
+      <DataTableColumnHeader column={column} title="Email" />
     ),
   },
   {
-    accessorKey: "isActive",
+    accessorKey: "username",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Active" />
+      <DataTableColumnHeader column={column} title="Username" />
     ),
-    cell: ({ row }) => (
-      <span className="whitespace-nowrap">
-        {row.original.isActive ? "Yes" : "No"}
-      </span>
+  },
+  {
+    accessorKey: "phone",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Phone" />
     ),
   },
   {

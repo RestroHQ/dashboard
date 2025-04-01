@@ -2,13 +2,17 @@
 
 import Loader from "@/components/common/loader";
 import { Card } from "@/components/ui/card";
-import { useGetRestaurantQuery } from "@/hooks/use-restaurant";
+import {
+  useGetRestaurantQuery,
+  useGetRestaurantsByIdsMutation,
+} from "@/hooks/use-restaurant";
 import { useRouter } from "next/navigation";
 import Cards from "./components/cards";
 import { OrderStats } from "./components/order-stats";
 import { OrdersChart } from "./components/orders-chart";
 import { OrdersTable } from "./components/orders-table";
 import PageHeader from "@/components/dashboard/page-header";
+import { removeCurrentRestaurant } from "@/services/cookies.service";
 
 const data = [
   { name: "Mon", sales: 4000 },
@@ -23,15 +27,27 @@ const data = [
 const Page = ({ restaurantId }) => {
   const router = useRouter();
 
-  const { data, isLoading } = useGetRestaurantQuery(restaurantId);
+  const {
+    data: restaurant,
+    isLoading,
+    isError,
+  } = useGetRestaurantQuery(restaurantId);
 
   if (!restaurantId || isLoading) {
     return <Loader />;
   }
 
+  if (!restaurant || isError) {
+    removeCurrentRestaurant();
+    router.push("/");
+  }
+
   return (
     <div className="flex-1 space-y-4 w-full p-8">
-      <PageHeader title={data.name} subtitle="Your restaurant overview." />
+      <PageHeader
+        title="Overview"
+        subtitle="A summary of your restaurant's performance"
+      />
 
       <div className="grid grid-cols-4 gap-4">
         <div className="col-span-3 flex flex-col gap-4">
