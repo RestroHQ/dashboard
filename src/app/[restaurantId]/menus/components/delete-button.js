@@ -51,8 +51,8 @@ export function DeleteMenuButton({ menuId, menuName }) {
         <DialogHeader>
           <DialogTitle>Confirm Deletion</DialogTitle>
           <DialogDescription>
-            Are you sure you want to delete the menu "{menuName}"? This action
-            cannot be undone.
+            Are you sure you want to delete the menu &apos;{menuName}&apos;?
+            This action cannot be undone.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>

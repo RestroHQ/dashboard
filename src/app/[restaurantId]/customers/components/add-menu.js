@@ -408,7 +408,8 @@ export function AddMenuDialog({ data }) {
                 {menuItems.length === 0 && (
                   <div className="text-center py-8">
                     <p className="text-muted-foreground">
-                      No menu items added yet. Click "Add Item" to get started.
+                      No menu items added yet. Click &apos;Add Item&apos; to get
+                      started.
                     </p>
                   </div>
                 )}
