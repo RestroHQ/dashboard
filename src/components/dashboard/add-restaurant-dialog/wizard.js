@@ -123,7 +123,7 @@ const OnboardingWizard = ({ className }) => {
 
       form.reset();
       setFiles({ logo: null, coverImage: null });
-      router.push(`/${restaurantId}`);
+      router.push(`/${restaurantId}/billing`);
     } catch (error) {
       console.error("Error submitting form:", error);
       toast({

@@ -12,6 +12,13 @@ export const DAYS_OF_WEEK = [
 
 export const restaurantSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
+  slug: z
+    .string()
+    .min(2, "Slug must be at least 2 characters")
+    .regex(
+      /^[a-z0-9-]+$/,
+      "Slug must be lowercase and contain only letters, numbers, and hyphens",
+    ),
   address: z.string().optional(),
   phone: z.string().optional(),
   email: z.string().email("Invalid email address"),
@@ -50,6 +57,7 @@ export const restaurantSchema = z.object({
 
 export const defaultValues = {
   name: "",
+  slug: "",
   address: "",
   email: "",
   phone: "",

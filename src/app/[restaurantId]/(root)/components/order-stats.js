@@ -1,107 +1,57 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
 
-export const description = "An area chart with a legend";
+export const OrderStats = ({ averageOrderValue, topMenuItems }) => {
+  // Convert topMenuItems to chart data format
+  const chartData =
+    topMenuItems?.map((item, index) => ({
+      name: item.name || `Item ${index + 1}`,
+      value: item.count || 0,
+    })) || [];
 
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-];
-
-const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "hsl(var(--chart-1))",
-  },
-  mobile: {
-    label: "Mobile",
-    color: "hsl(var(--chart-2))",
-  },
-};
-
-export function OrderStats() {
   return (
     <Card className="flex flex-col h-fit">
       <CardHeader>
-        <CardTitle>Order Stats</CardTitle>
-        <CardDescription>Showing the number of orders placed</CardDescription>
+        <CardTitle>Top Menu Items</CardTitle>
+        <CardDescription>
+          Average order value: ${averageOrderValue?.toFixed(2) || 0}
+        </CardDescription>
       </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig}>
+      <CardContent className="h-[300px]">
+        <ResponsiveContainer width="100%" height="100%">
           <AreaChart
-            accessibilityLayer
             data={chartData}
-            margin={{
-              left: 12,
-              right: 12,
-            }}
+            margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
           >
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="month"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
-            />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator="line" />}
-            />
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
             <Area
-              dataKey="mobile"
-              type="natural"
-              fill="var(--color-mobile)"
+              type="monotone"
+              dataKey="value"
+              stroke="#8884d8"
+              fill="#8884d8"
               fillOpacity={0.4}
-              stroke="var(--color-mobile)"
-              stackId="a"
-            />
-            <Area
-              dataKey="desktop"
-              type="natural"
-              fill="var(--color-desktop)"
-              fillOpacity={0.4}
-              stroke="var(--color-desktop)"
-              stackId="a"
             />
           </AreaChart>
-        </ChartContainer>
+        </ResponsiveContainer>
       </CardContent>
-      <CardFooter>
-        <div className="flex w-full items-start gap-2 text-sm">
-          <div className="grid gap-2">
-            <div className="flex items-center gap-2 font-medium leading-none">
-              Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-            </div>
-            <div className="flex items-center gap-2 leading-none text-muted-foreground">
-              January - June 2024
-            </div>
-          </div>
-        </div>
-      </CardFooter>
     </Card>
   );
-}
+};

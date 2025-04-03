@@ -30,7 +30,7 @@ import { cn } from "@/lib/utils";
 import { Settings2 } from "lucide-react";
 import { DataTablePagination } from "./reusable/data-table-pagination";
 
-export function DataTable({ columns, data, keyword }) {
+export function DataTable({ columns, data = [], keyword }) {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});

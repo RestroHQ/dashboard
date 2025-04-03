@@ -2,8 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { DataTableColumnHeader } from "@/components/ui/reusable/data-table-column-header";
-import { MenuSheet } from "./menu-sheet";
-import { DeleteMenuButton } from "./delete-button";
 
 export const columns = [
   {
@@ -19,13 +17,13 @@ export const columns = [
     ),
   },
   {
-    accessorKey: "isActive",
+    accessorKey: "isAvailable",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Active" />
+      <DataTableColumnHeader column={column} title="Available" />
     ),
     cell: ({ row }) => (
       <span className="whitespace-nowrap">
-        {row.original.isActive ? "Yes" : "No"}
+        {row.original.isAvailable ? "Yes" : "No"}
       </span>
     ),
   },
@@ -47,12 +45,9 @@ export const columns = [
     ),
     cell: ({ row }) => (
       <div className="flex items-center gap-2">
-        <MenuSheet data={row.original} />
-
-        <DeleteMenuButton
-          menuId={row.original.id}
-          menuName={row.original.name}
-        />
+        <Button variant="destructive" size="sm">
+          Delete
+        </Button>
       </div>
     ),
   },

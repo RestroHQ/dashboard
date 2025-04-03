@@ -3,15 +3,12 @@
 import Loader from "@/components/common/loader";
 import PageHeader from "@/components/dashboard/page-header";
 import { DataTable } from "@/components/ui/data-table";
-import { useGetMenusQuery } from "@/hooks/use-menu";
-import { useRouter } from "next/navigation";
+import { useGetTablesQuery } from "@/hooks/use-table";
 import { columns } from "./components/columns";
-import { MenuSheet } from "./components/menu-sheet";
+import { TablesSheet } from "./components/tables-sheet";
 
 const Page = ({ restaurantId }) => {
-  const router = useRouter();
-
-  const { data: menus, isLoading } = useGetMenusQuery(restaurantId);
+  const { data: tables, isLoading } = useGetTablesQuery(restaurantId);
 
   if (isLoading) {
     return <Loader />;
@@ -20,12 +17,15 @@ const Page = ({ restaurantId }) => {
   return (
     <main className="p-8">
       <div className="flex justify-between">
-        <PageHeader title="Menus" subtitle="Manage your restaurant's menus." />
+        <PageHeader
+          title="Tables"
+          subtitle="Manage your restaurant's tables."
+        />
 
-        <MenuSheet restaurantId={restaurantId} />
+        <TablesSheet restaurantId={restaurantId} />
       </div>
 
-      <DataTable columns={columns} data={menus} keyword={"name"} />
+      <DataTable columns={columns} data={tables} keyword={"name"} />
     </main>
   );
 };

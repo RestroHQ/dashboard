@@ -8,24 +8,24 @@ import {
   ChevronLeft,
   ChevronRight,
   ClipboardList,
+  CreditCard,
+  FileUser,
   HelpCircle,
   LayoutDashboard,
-  Menu,
   Settings,
+  SquareMenu,
   Star,
   Store,
+  Table,
   Users,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import LogoWithText from "../common/logo-with-text";
+import AddRestaurantDialog from "./add-restaurant-dialog";
 import { RestaurantSwitcher } from "./restaurant-switcher";
 import { UserNav } from "./user-nav";
-import { FileUser } from "lucide-react";
-import AddRestaurantDialog from "./add-restaurant-dialog";
-import { BarChart3 } from "lucide-react";
-import { CreditCard } from "lucide-react";
 
 export default function Sidebar({ restaurantId, className }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -33,7 +33,7 @@ export default function Sidebar({ restaurantId, className }) {
 
   const routes = [
     {
-      label: "Dashboard",
+      label: "Overview",
       icon: LayoutDashboard,
       href: `/${restaurantId}`,
       color: "text-sky-500",
@@ -46,9 +46,15 @@ export default function Sidebar({ restaurantId, className }) {
     },
     {
       label: "Menus",
-      icon: Menu,
+      icon: SquareMenu,
       href: `/${restaurantId}/menus`,
       color: "text-pink-500",
+    },
+    {
+      label: "Tables",
+      icon: Table,
+      href: `/${restaurantId}/tables`,
+      color: "text-amber-500",
     },
     {
       label: "Orders",
@@ -68,24 +74,18 @@ export default function Sidebar({ restaurantId, className }) {
       href: `/${restaurantId}/customers`,
       color: "text-blue-500",
     },
-    {
-      label: "Reviews",
-      icon: Star,
-      href: `/${restaurantId}/reviews`,
-      color: "text-yellow-500",
-    },
-    {
-      label: "Team",
-      icon: Users,
-      href: `/${restaurantId}/team`,
-      color: "text-fuchsia-500",
-    },
-    {
-      label: "Analytics",
-      icon: BarChart3,
-      href: `/${restaurantId}/analytics`,
-      color: "text-green-500",
-    },
+    // {
+    //   label: "Reviews",
+    //   icon: Star,
+    //   href: `/${restaurantId}/reviews`,
+    //   color: "text-yellow-500",
+    // },
+    // {
+    //   label: "Team",
+    //   icon: Users,
+    //   href: `/${restaurantId}/team`,
+    //   color: "text-fuchsia-500",
+    // },
     {
       label: "Billing",
       icon: CreditCard,
@@ -98,18 +98,18 @@ export default function Sidebar({ restaurantId, className }) {
       href: `/${restaurantId}/settings`,
       color: "text-gray-500",
     },
-    {
-      label: "Help & Support",
-      icon: HelpCircle,
-      href: `/${restaurantId}/support`,
-      color: "text-indigo-500",
-    },
+    // {
+    //   label: "Help & Support",
+    //   icon: HelpCircle,
+    //   href: `/${restaurantId}/support`,
+    //   color: "text-indigo-500",
+    // },
   ];
 
   return (
     <div
       className={cn(
-        "relative flex flex-col border-r bg-card min-w-max max-h-svh",
+        "fixed flex flex-col border-r bg-card min-w-max h-svh z-50",
         isCollapsed && "min-w-fit",
         className,
       )}
@@ -165,15 +165,6 @@ export default function Sidebar({ restaurantId, className }) {
           isCollapsed && "items-center",
         )}
       >
-        <Button
-          variant="outline"
-          className="w-full"
-          onClick={() => setIsCollapsed(!isCollapsed)}
-        >
-          {isCollapsed ? <ChevronRight /> : <ChevronLeft />}
-          {!isCollapsed && <span>Toggle Sidebar</span>}
-        </Button>
-
         <UserNav isCollapsed={isCollapsed} />
       </div>
     </div>
