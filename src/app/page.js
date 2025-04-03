@@ -92,9 +92,7 @@ const Home = () => {
               >
                 <Avatar className="h-10 w-10">
                   <AvatarImage src={restaurant.logo} alt={restaurant.name} />
-                  <AvatarFallback>
-                    {restaurant.name.split(" ").map((c) => c[0])}
-                  </AvatarFallback>
+                  <AvatarFallback>{restaurant.name[0]}</AvatarFallback>
                 </Avatar>
 
                 <div>

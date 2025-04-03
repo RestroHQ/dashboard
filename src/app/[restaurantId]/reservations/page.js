@@ -5,15 +5,18 @@ import { DataTable } from "@/components/ui/data-table";
 import { useRouter } from "next/navigation";
 import { columns } from "./components/columns";
 import { useGetReservationsQuery } from "@/hooks/use-reservation";
+import Loader from "@/components/common/loader";
 
 const Page = ({ restaurantId }) => {
   const router = useRouter();
 
-  const {
-    data: { reservations },
-  } = useGetReservationsQuery(restaurantId);
+  const { data, isLoading } = useGetReservationsQuery(restaurantId);
 
-  console.log(reservations);
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  const reservations = data?.reservations || [];
 
   return (
     <main className="p-8">

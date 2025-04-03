@@ -1,13 +1,5 @@
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
   Form,
   FormControl,
   FormField,
@@ -16,24 +8,29 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { useFileUpload } from "@/hooks/use-files";
+import { useCreateMenuMutation, useUpdateMenuMutation } from "@/hooks/use-menu";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { useFileUpload } from "@/hooks/use-files";
-import { useCreateMenuMutation } from "@/hooks/use-menu";
-import { Trash2, UploadCloud } from "lucide-react";
-import { useState } from "react";
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FormDescription } from "@/components/ui/form";
-import { Progress } from "@/components/ui/progress";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
+import { useGetCurrentRestaurantQuery } from "@/hooks/use-restaurant";
 import { useToast } from "@/hooks/use-toast";
 import { createId } from "@paralleldrive/cuid2";
-import { CheckCircle } from "lucide-react";
 import { FileCheck } from "lucide-react";
 
 const menuFormSchema = z.object({
@@ -45,7 +42,7 @@ const menuFormSchema = z.object({
       z.object({
         name: z.string().min(1, "Item name is required"),
         description: z.string().optional(),
-        price: z.number().positive("Price must be positive"),
+        price: z.coerce.number().positive("Price must be positive"),
         imageUrl: z.string().optional(),
         isAvailable: z.boolean().optional().default(true),
       }),
@@ -53,22 +50,22 @@ const menuFormSchema = z.object({
     .optional(),
 });
 
-export function AddMenuDialog({ data }) {
+export function MenuSheet({ data }) {
   const menuId = data ? data.id : createId();
 
-  const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const { data: restaurantId } = useGetCurrentRestaurantQuery();
 
   const { toast } = useToast();
 
   const { mutate: uploadFile } = useFileUpload({
     onSuccess: (data, variables) => {
-      // Check if variables exists before accessing it
       if (variables && variables.entityId !== undefined) {
         const itemIndex = variables.entityId;
         setValue(`menuItems.${itemIndex}.imageUrl`, data.path);
       } else {
-        // Fallback solution - update the most recently uploaded item
         const lastItemIndex = menuItems.length - 1;
         setValue(`menuItems.${lastItemIndex}.imageUrl`, data.path);
         console.warn(
@@ -77,7 +74,7 @@ export function AddMenuDialog({ data }) {
       }
 
       setIsUploading(false);
-      setUploadProgress(0);
+
       toast({
         title: "Image uploaded successfully",
         variant: "default",
@@ -85,16 +82,14 @@ export function AddMenuDialog({ data }) {
     },
     onError: (error) => {
       setIsUploading(false);
-      setUploadProgress(0);
+
       toast({
         title: "Image upload failed",
         description: error.message || "Unknown error occurred",
         variant: "destructive",
       });
     },
-    onProgress: (progress) => {
-      setUploadProgress(progress);
-    },
+    onProgress: (progress) => {},
   });
 
   const { mutate: createMenu, isLoading: isCreating } = useCreateMenuMutation({
@@ -103,6 +98,8 @@ export function AddMenuDialog({ data }) {
         title: "Menu created successfully",
         variant: "default",
       });
+      form.reset();
+      setIsOpen(false);
     },
     onError: (error) => {
       toast({
@@ -113,10 +110,35 @@ export function AddMenuDialog({ data }) {
     },
   });
 
-  const defaultValues = {
-    isActive: true,
-    menuItems: [],
-  };
+  const { mutate: updateMenu, isLoading: isUpdating } = useUpdateMenuMutation({
+    onSuccess: (data) => {
+      toast({
+        title: "Menu updated successfully",
+        variant: "default",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Failed to update menu",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const defaultValues = data
+    ? {
+        name: data.name,
+        description: data.description,
+        isActive: data.isActive,
+        menuItems: data.menuItems,
+      }
+    : {
+        name: "",
+        description: "",
+        isActive: true,
+        menuItems: [],
+      };
 
   const form = useForm({
     resolver: zodResolver(menuFormSchema),
@@ -126,8 +148,19 @@ export function AddMenuDialog({ data }) {
   const { control, handleSubmit, setValue, watch } = form;
   const menuItems = watch("menuItems") || [];
 
-  const onSubmit = (data) => {
-    createMenu({ menuId, ...data });
+  const onSubmit = (formData) => {
+    if (data) {
+      updateMenu({
+        restaurantId,
+        menuId,
+        data: formData,
+      });
+    } else {
+      createMenu({
+        restaurantId,
+        data: { ...formData, menuId },
+      });
+    }
   };
 
   const handleFileUpload = (file) => {
@@ -145,24 +178,34 @@ export function AddMenuDialog({ data }) {
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button>
-          <Plus size={16} className="mr-2" />
-          Create Menu
-        </Button>
-      </DialogTrigger>
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+      <SheetTrigger asChild>
+        {data ? (
+          <Button size="sm" variant="outline">
+            Update
+          </Button>
+        ) : (
+          <Button>
+            <Plus size={16} className="mr-2" />
+            Create Menu
+          </Button>
+        )}
+      </SheetTrigger>
 
-      <DialogContent className="w-full max-w-4xl h-[90svh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>Create Menu</DialogTitle>
-          <DialogDescription>
-            Create a new menu for your restaurant.
-          </DialogDescription>
-        </DialogHeader>
+      <SheetContent className="sm:w-full sm:max-w-3xl overflow-y-auto">
+        <SheetHeader>
+          <SheetTitle className="text-2xl font-bold">
+            {data ? "Update Menu" : "Create Menu"}
+          </SheetTitle>
+          <SheetDescription>
+            {data
+              ? "Update the details of your menu."
+              : "Create a new menu for your restaurant."}
+          </SheetDescription>
+        </SheetHeader>
 
         <Form {...form}>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 mt-8">
             <Card>
               <CardHeader>
                 <CardTitle>Menu Details</CardTitle>
@@ -417,12 +460,18 @@ export function AddMenuDialog({ data }) {
 
             <div className="flex justify-end">
               <Button type="submit" disabled={isCreating}>
-                {isCreating ? "Creating..." : "Create Menu"}
+                {data
+                  ? isUpdating
+                    ? "Updating..."
+                    : "Update Menu"
+                  : isCreating
+                    ? "Creating..."
+                    : "Create Menu"}
               </Button>
             </div>
           </form>
         </Form>
-      </DialogContent>
-    </Dialog>
+      </SheetContent>
+    </Sheet>
   );
 }

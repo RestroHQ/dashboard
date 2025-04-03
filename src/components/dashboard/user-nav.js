@@ -32,9 +32,9 @@ export const UserNav = ({ isCollapsed = false, align = "start" }) => {
           <Avatar className="h-10 w-10">
             <AvatarImage
               src="https://avatar.iran.liara.run/public"
-              alt={user.name}
+              alt={user?.name}
             />
-            <AvatarFallback>{user.name[0]}</AvatarFallback>
+            <AvatarFallback>{user?.name[0]}</AvatarFallback>
           </Avatar>
           <div
             className={cn(
@@ -42,9 +42,9 @@ export const UserNav = ({ isCollapsed = false, align = "start" }) => {
               isCollapsed && "hidden",
             )}
           >
-            <p className="text-sm font-medium leading-none">{user.name}</p>
+            <p className="text-sm font-medium leading-none">{user?.name}</p>
             <p className="text-xs leading-none text-muted-foreground">
-              {user.email}
+              {user?.email}
             </p>
           </div>
         </div>

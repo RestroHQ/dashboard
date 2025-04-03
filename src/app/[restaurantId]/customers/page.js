@@ -9,10 +9,9 @@ import { columns } from "./components/columns";
 const Page = ({ restaurantId }) => {
   const router = useRouter();
 
-  const {
-    data: { customers },
-    isLoading,
-  } = useGetCustomersQuery(restaurantId);
+  const { data, isLoading } = useGetCustomersQuery(restaurantId);
+
+  const customers = data?.customers || [];
 
   return (
     <main className="p-8">
@@ -23,7 +22,12 @@ const Page = ({ restaurantId }) => {
         />
       </div>
 
-      <DataTable columns={columns} data={customers} keyword={"name"} />
+      <DataTable
+        columns={columns}
+        data={customers}
+        keyword={"name"}
+        isLoading={isLoading}
+      />
     </main>
   );
 };

@@ -3,10 +3,9 @@
 import Loader from "@/components/common/loader";
 import PageHeader from "@/components/dashboard/page-header";
 import { DataTable } from "@/components/ui/data-table";
-import { useGetMenusQuery } from "@/hooks/use-menu";
-import { AddMenuDialog } from "./components/add-menu";
-import { columns } from "./components/columns";
 import { useGetTablesQuery } from "@/hooks/use-table";
+import { columns } from "./components/columns";
+import { TablesSheet } from "./components/tables-sheet";
 
 const Page = ({ restaurantId }) => {
   const { data: tables, isLoading } = useGetTablesQuery(restaurantId);
@@ -23,7 +22,7 @@ const Page = ({ restaurantId }) => {
           subtitle="Manage your restaurant's tables."
         />
 
-        <AddMenuDialog restaurantId={restaurantId} />
+        <TablesSheet restaurantId={restaurantId} />
       </div>
 
       <DataTable columns={columns} data={tables} keyword={"name"} />

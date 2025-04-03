@@ -1,117 +1,87 @@
 "use client";
 
 import * as React from "react";
-import { TrendingUp } from "lucide-react";
-import { Label, Pie, PieChart } from "recharts";
+import { Pie, PieChart } from "recharts";
 
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
 
-const chartData = [
-  { browser: "completed", orders: 167, fill: "var(--color-completed)" },
-  { browser: "pending", orders: 21, fill: "var(--color-pending)" },
-  { browser: "canceled", orders: 6, fill: "var(--color-canceled)" },
-];
+export const OrdersChart = ({ data, startDate, endDate }) => {
+  const chartData = [
+    {
+      name: "Completed",
+      value: data?.filter((d) => d.status === "completed").length || 0,
+      fill: "var(--color-completed)",
+    },
+    {
+      name: "Pending",
+      value: data?.filter((d) => d.status === "pending").length || 0,
+      fill: "var(--color-pending)",
+    },
+    {
+      name: "Canceled",
+      value: data?.filter((d) => d.status === "canceled").length || 0,
+      fill: "var(--color-canceled)",
+    },
+  ];
 
-const chartConfig = {
-  orders: {
-    label: "Total",
-  },
-  completed: {
-    label: "Completed",
-    color: "hsl(var(--chart-2))",
-  },
-  pending: {
-    label: "Pending",
-    color: "hsl(var(--chart-4))",
-  },
-  canceled: {
-    label: "Canceled",
-    color: "hsl(var(--chart-1))",
-  },
-};
+  const totalOrders = chartData.reduce((acc, curr) => acc + curr.value, 0);
 
-export function OrdersChart() {
-  const totalVisitors = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.orders, 0);
-  }, []);
+  const formatDateRange = (start, end) => {
+    return `${start.toLocaleDateString("default", { month: "long" })} ${start.getFullYear()}`;
+  };
 
   return (
     <Card className="flex flex-col h-fit">
       <CardHeader className="items-center pb-0">
         <CardTitle>Orders Summary</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardDescription>{formatDateRange(startDate, endDate)}</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
-        <ChartContainer
-          config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px]"
-        >
-          <PieChart>
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
+        <div className="mx-auto aspect-square max-h-[250px]">
+          <PieChart width={300} height={300}>
             <Pie
               data={chartData}
-              dataKey="orders"
-              nameKey="browser"
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
               innerRadius={60}
-              strokeWidth={5}
+              outerRadius={80}
+              paddingAngle={5}
             >
-              <Label
-                content={({ viewBox }) => {
-                  if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                    return (
-                      <text
-                        x={viewBox.cx}
-                        y={viewBox.cy}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                      >
-                        <tspan
-                          x={viewBox.cx}
-                          y={viewBox.cy}
-                          className="fill-foreground text-3xl font-bold"
-                        >
-                          {totalVisitors.toLocaleString()}
-                        </tspan>
-                        <tspan
-                          x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 24}
-                          className="fill-muted-foreground"
-                        >
-                          Visitors
-                        </tspan>
-                      </text>
-                    );
-                  }
-                }}
-              />
+              {chartData.map((entry, index) => (
+                <React.Fragment key={`cell-${index}`}>
+                  <text
+                    x={300 / 2}
+                    y={300 / 2}
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                    className="text-2xl font-bold"
+                  >
+                    {totalOrders}
+                  </text>
+                  <text
+                    x={300 / 2}
+                    y={300 / 2 + 20}
+                    textAnchor="middle"
+                    className="text-xs text-muted-foreground"
+                  >
+                    Orders
+                  </text>
+                </React.Fragment>
+              ))}
             </Pie>
           </PieChart>
-        </ChartContainer>
+        </div>
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total orders for the last 6 months
-        </div>
-      </CardFooter>
     </Card>
   );
-}
+};
+
+export default OrdersChart;

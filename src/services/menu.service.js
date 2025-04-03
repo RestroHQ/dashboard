@@ -24,9 +24,12 @@ export const getMenu = async (restaurantId, menuId) => {
   }
 };
 
-export const createMenu = async (data) => {
+export const createMenu = async (restaurantId, data) => {
   try {
-    const response = await axiosClientWithAuth.post("/menus", data);
+    const response = await axiosClientWithAuth.post(
+      `/restaurants/${restaurantId}/menus`,
+      data,
+    );
     return response.data;
   } catch (error) {
     console.error("Error creating menu:", error);
@@ -34,11 +37,27 @@ export const createMenu = async (data) => {
   }
 };
 
-export const updateMenu = async (id, data) => {
+export const updateMenu = async (restaurantId, menuId, data) => {
   try {
-    const response = await axiosClientWithAuth.patch(`/menus/${id}`, data);
+    const response = await axiosClientWithAuth.patch(
+      `/restaurants/${restaurantId}/menus/${menuId}`,
+      data,
+    );
     return response.data;
   } catch (error) {
+    console.error("Error updating menu:", error);
+    throw error;
+  }
+};
+
+export const deleteMenu = async (restaurantId, menuId) => {
+  try {
+    const response = await axiosClientWithAuth.delete(
+      `/restaurants/${restaurantId}/menus/${menuId}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting menu:", error);
     throw error;
   }
 };

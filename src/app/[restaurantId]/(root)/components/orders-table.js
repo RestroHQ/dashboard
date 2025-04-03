@@ -1,105 +1,68 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
 
-const orders = [
-  {
-    table: 8,
-    order: "#53",
-    status: "preparing",
-  },
-  {
-    table: 2,
-    order: "#54",
-    status: "ready",
-  },
-  {
-    table: 4,
-    order: "#55",
-    status: "pending-payment",
-  },
-  {
-    table: 11,
-    order: "#56",
-    status: "preparing",
-  },
-  {
-    table: 1,
-    order: "#57",
-    status: "ready",
-  },
-  {
-    table: 9,
-    order: "#58",
-    status: "pending-payment",
-  },
-  {
-    table: 6,
-    order: "#59",
-    status: "preparing",
-  },
-  {
-    table: 5,
-    order: "#60",
-    status: "served",
-  },
-  {
-    table: 3,
-    order: "#61",
-    status: "ready",
-  },
-  {
-    table: 7,
-    order: "#62",
-    status: "preparing",
-  },
-  {
-    table: 10,
-    order: "#63",
-    status: "pending-payment",
-  },
-];
+const statusColors = {
+  preparing: "bg-yellow-500/30 border-yellow-500",
+  ready: "bg-green-500/30 border-green-500",
+  "pending-payment": "bg-red-500/30 border-red-500",
+  completed: "bg-blue-500/30 border-blue-500",
+  served: "bg-purple-500/30 border-purple-500",
+};
 
-export function OrdersTable() {
+export const OrdersTable = ({ orderFrequency }) => {
+  if (!orderFrequency || orderFrequency.length === 0) {
+    return (
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Order</TableHead>
+            <TableHead>Status</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell
+              colSpan={2}
+              className="text-center text-muted-foreground py-8"
+            >
+              No orders found
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    );
+  }
+
   return (
     <Table>
       <TableHeader>
         <TableRow>
           <TableHead>Order</TableHead>
-          <TableHead>Table</TableHead>
           <TableHead>Status</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {orders.map((order) => (
-          <TableRow key={order.order}>
-            <TableCell className="font-medium">{order.order}</TableCell>
-            <TableCell>{order.table}</TableCell>
+        {orderFrequency.slice(0, 10).map((order, index) => (
+          <TableRow key={index}>
+            <TableCell className="font-medium">
+              #{order.orderId || `ORD-${index + 1}`}
+            </TableCell>
             <TableCell>
-              {order.status === "preparing" ? (
-                <span className="bg-yellow-500/30 border text-xs border-yellow-500 py-1 px-3 rounded-full">
-                  Preparing
-                </span>
-              ) : order.status === "ready" ? (
-                <span className="bg-green-500/30 border text-xs border-een-500 py-1 px-3 rounded-full">
-                  Ready
-                </span>
-              ) : (
-                <span className="bg-red-500/30 border text-xs border-red-500 py-1 px-3 rounded-full">
-                  Pending Payment
-                </span>
-              )}
+              <span
+                className={`${statusColors[order.status] || "bg-gray-500/30 border-gray-500"} border text-xs py-1 px-3 rounded-full`}
+              >
+                {order.status || "Unknown"}
+              </span>
             </TableCell>
           </TableRow>
         ))}
       </TableBody>
     </Table>
   );
-}
+};

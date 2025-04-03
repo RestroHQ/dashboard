@@ -2,7 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { DataTableColumnHeader } from "@/components/ui/reusable/data-table-column-header";
-import { ViewMenu } from "./view-menu";
+import { MenuSheet } from "./menu-sheet";
+import { DeleteMenuButton } from "./delete-button";
 
 export const columns = [
   {
@@ -46,11 +47,12 @@ export const columns = [
     ),
     cell: ({ row }) => (
       <div className="flex items-center gap-2">
-        <ViewMenu menu={row} />
+        <MenuSheet data={row.original} />
 
-        <Button variant="destructive" size="sm">
-          Delete
-        </Button>
+        <DeleteMenuButton
+          menuId={row.original.id}
+          menuName={row.original.name}
+        />
       </div>
     ),
   },

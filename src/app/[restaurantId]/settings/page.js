@@ -1,6 +1,7 @@
 "use client";
 
 import Loader from "@/components/common/loader";
+import PageHeader from "@/components/dashboard/page-header";
 import { useGetRestaurantQuery } from "@/hooks/use-restaurant";
 import Image from "next/image";
 
@@ -12,8 +13,13 @@ const Page = ({ restaurantId }) => {
   }
 
   return (
-    <div>
-      <h1>Settings</h1>
+    <main className="p-8">
+      <div className="flex justify-between">
+        <PageHeader
+          title="Settings"
+          subtitle="Manage your restaurant's settings"
+        />
+      </div>
 
       <div className="flex items-center space-x-4">
         <Image
@@ -28,7 +34,7 @@ const Page = ({ restaurantId }) => {
           <p>{restaurant.description}</p>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 

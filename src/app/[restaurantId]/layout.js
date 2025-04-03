@@ -7,7 +7,7 @@ const Layout = async ({ params, children }) => {
   return (
     <SidebarProvider>
       <Sidebar restaurantId={restaurantId} />
-      <main className="w-full">{children}</main>
+      <main className="w-full ml-64">{children}</main>
     </SidebarProvider>
   );
 };

@@ -24,8 +24,8 @@ export const useGetTableByIdQuery = (id) => {
 export const useCreateTableMutation = ({ onSuccess, onError }) => {
   return useMutation({
     mutationKey: "create-table",
-    mutationFn: async (data) => {
-      const response = await createTable(data);
+    mutationFn: async ({ restaurantId, data }) => {
+      const response = await createTable(restaurantId, data);
       if (response instanceof Error) throw response;
       return response;
     },

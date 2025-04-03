@@ -24,9 +24,12 @@ export const getTable = async (restaurantId, tableId) => {
   }
 };
 
-export const createTable = async (data) => {
+export const createTable = async (restaurantId, data) => {
   try {
-    const response = await axiosClientWithAuth.post("/tables", data);
+    const response = await axiosClientWithAuth.post(
+      `/restaurants/${restaurantId}/tables`,
+      data,
+    );
     return response.data;
   } catch (error) {
     console.error("Error creating table:", error);

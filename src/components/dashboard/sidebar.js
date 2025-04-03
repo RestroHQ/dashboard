@@ -74,18 +74,18 @@ export default function Sidebar({ restaurantId, className }) {
       href: `/${restaurantId}/customers`,
       color: "text-blue-500",
     },
-    {
-      label: "Reviews",
-      icon: Star,
-      href: `/${restaurantId}/reviews`,
-      color: "text-yellow-500",
-    },
-    {
-      label: "Team",
-      icon: Users,
-      href: `/${restaurantId}/team`,
-      color: "text-fuchsia-500",
-    },
+    // {
+    //   label: "Reviews",
+    //   icon: Star,
+    //   href: `/${restaurantId}/reviews`,
+    //   color: "text-yellow-500",
+    // },
+    // {
+    //   label: "Team",
+    //   icon: Users,
+    //   href: `/${restaurantId}/team`,
+    //   color: "text-fuchsia-500",
+    // },
     {
       label: "Billing",
       icon: CreditCard,
@@ -98,18 +98,18 @@ export default function Sidebar({ restaurantId, className }) {
       href: `/${restaurantId}/settings`,
       color: "text-gray-500",
     },
-    {
-      label: "Help & Support",
-      icon: HelpCircle,
-      href: `/${restaurantId}/support`,
-      color: "text-indigo-500",
-    },
+    // {
+    //   label: "Help & Support",
+    //   icon: HelpCircle,
+    //   href: `/${restaurantId}/support`,
+    //   color: "text-indigo-500",
+    // },
   ];
 
   return (
     <div
       className={cn(
-        "relative flex flex-col border-r bg-card min-w-max max-h-svh",
+        "fixed flex flex-col border-r bg-card min-w-max h-svh z-50",
         isCollapsed && "min-w-fit",
         className,
       )}
@@ -165,15 +165,6 @@ export default function Sidebar({ restaurantId, className }) {
           isCollapsed && "items-center",
         )}
       >
-        <Button
-          variant="outline"
-          className="w-full"
-          onClick={() => setIsCollapsed(!isCollapsed)}
-        >
-          {isCollapsed ? <ChevronRight /> : <ChevronLeft />}
-          {!isCollapsed && <span>Toggle Sidebar</span>}
-        </Button>
-
         <UserNav isCollapsed={isCollapsed} />
       </div>
     </div>
